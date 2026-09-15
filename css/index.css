@@ -9,10 +9,6 @@ body {
     min-height: 100%;
 }
 
-body {
-    background: #ffffff;
-}
-
 main {
     position: relative;
 }
@@ -223,7 +219,6 @@ main {
     grid-column: 2;
     min-width: 0;
     padding-block: min(6.25vw, 120px);
-    background: #ffffff;
 }
 
 .profile-about {
@@ -315,7 +310,6 @@ main {
         z-index: 1;
         grid-column: auto;
         padding: 64px 24px;
-        background: #ffffff;
     }
 
     .profile-about,
