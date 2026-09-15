@@ -1,6 +1,6 @@
 html {
     font-family: 'Pretendard', sans-serif;
-    background: #ffffff;
+    background: var(--beige);
 }
 
 html,
@@ -13,70 +13,90 @@ body {
     background: #ffffff;
 }
 
+main {
+    position: relative;
+}
+
 /* Figma PC frame: 1920 × 1020 */
 .portfolio-intro {
     position: relative;
+    z-index: 1;
     width: 100%;
-    height: 100vh;
-    height: 100svh;
+    height: clamp(620px, 53.125vw, 1020px);
     overflow: hidden;
-    background: #ffffff;
+    background: var(--beige);
     isolation: isolate;
 }
 
-.hero {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom, #ffffff 0 50%, var(--blue) 50% 100%);
-}
-
-.hero__title {
+.portfolio-intro__title {
     position: absolute;
     z-index: 1;
+    top: 0;
     left: 50%;
     margin: 0;
     transform: translateX(-50%);
-    color: var(--blue);
-    font-size: min(12.5vw, 23.5294118vh);
+    color: #000000;
+    font-size: clamp(52px, 12.5vw, 240px);
     font-weight: 900;
-    line-height: 1.2;
+    line-height: normal;
     letter-spacing: 0;
     white-space: nowrap;
 }
 
-.hero__title--top {
-    top: 21.9607843%;
+.portfolio-intro__image {
+    position: absolute;
+    z-index: 2;
+    top: min(10.9375vw, 210px);
+    left: 50%;
+    width: min(46.875vw, 900px);
+    aspect-ratio: 3 / 2;
+    margin: 0;
+    transform: translateX(-50%);
+    overflow: hidden;
 }
 
-.hero__title--bottom {
-    top: 50%;
+.portfolio-intro__image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.portfolio-intro__name {
+    position: absolute;
+    z-index: 2;
+    top: min(36.09375vw, 693px);
+    left: 50%;
+    margin: 0;
+    transform: translateX(-50%);
     color: #ffffff;
+    font-size: clamp(32px, 4.1666667vw, 80px);
+    font-weight: 900;
+    line-height: normal;
+    letter-spacing: 0;
+    white-space: nowrap;
 }
 
+/* Figma 기준: 1920 × 1020px, 글자 80px, 상하 여백 10px, 간격 60px */
 .marquee {
     position: absolute;
     z-index: 2;
     display: flex;
     width: 100%;
+    height: clamp(74px, 8.6458333vw, 166px);
+    align-items: center;
     overflow: hidden;
-    font-size: min(2.08333333vw, 3.92156863vh);
-    font-weight: 400;
-    line-height: 1.2;
+    padding-block: clamp(6px, 0.5208333vw, 10px);
+    font-size: clamp(32px, 4.1666667vw, 80px);
+    font-weight: 900;
+    line-height: normal;
     white-space: nowrap;
 }
 
-.marquee--top {
-    top: 0;
-    padding-block: min(0.8333333333vw, 1.568627451vh);
-    color: var(--blue);
-    background: #ffffff;
-}
-
-.marquee--bottom {
+.marquee--intro {
     bottom: 0;
-    padding-block: min(0.8333333333vw, 1.568627451vh);
     color: #ffffff;
-    background: var(--blue);
+    background: var(--brown);
 }
 
 .marquee__track {
@@ -90,16 +110,12 @@ body {
     flex: none;
     align-items: center;
     width: max-content;
-    gap: min(6.66666667vw, 12.5490196vh);
-    padding-right: min(6.66666667vw, 12.5490196vh);
+    gap: clamp(30px, 3.125vw, 60px);
+    padding-right: clamp(30px, 3.125vw, 60px);
 }
 
 .marquee__track--left {
     animation: marquee-left calc(26s * var(--marquee-repeat, 1)) linear infinite;
-}
-
-.marquee__track--right {
-    animation: marquee-right calc(26s * var(--marquee-repeat, 1)) linear infinite;
 }
 
 @keyframes marquee-left {
@@ -108,14 +124,237 @@ body {
     }
 }
 
-@keyframes marquee-right {
-    from {
-        transform: translateX(-50%);
-    }
-}
-
 @media (prefers-reduced-motion: reduce) {
     .marquee__track {
         animation-play-state: paused;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1200px) {
+    .portfolio-intro {
+        height: clamp(700px, 68.3333333vw, 820px);
+    }
+
+    .portfolio-intro__title {
+        font-size: clamp(96px, 12.5vw, 150px);
+    }
+
+    .portfolio-intro__image {
+        top: clamp(130px, 15vw, 180px);
+        width: clamp(600px, 62.5vw, 750px);
+    }
+
+    .portfolio-intro__name {
+        top: auto;
+        bottom: clamp(120px, 14vw, 170px);
+        font-size: clamp(52px, 6.6666667vw, 80px);
+    }
+
+    .marquee {
+        height: clamp(96px, 10vw, 120px);
+        font-size: clamp(48px, 6.6666667vw, 80px);
+    }
+}
+
+@media (max-width: 768px) {
+    .portfolio-intro {
+        height: clamp(520px, 80vw, 620px);
+    }
+
+    .portfolio-intro__title {
+        top: 20px;
+        font-size: clamp(52px, 13vw, 100px);
+    }
+
+    .portfolio-intro__image {
+        top: clamp(118px, 18vw, 136px);
+        width: min(78vw, 460px);
+    }
+
+    .portfolio-intro__name {
+        top: auto;
+        bottom: 112px;
+        font-size: clamp(32px, 8vw, 52px);
+    }
+
+    .marquee {
+        height: 92px;
+        font-size: clamp(30px, 8vw, 48px);
+    }
+}
+
+@media (max-width: 600px) {
+    .portfolio-intro {
+        height: clamp(540px, 105vw, 660px);
+    }
+
+    .portfolio-intro__image {
+        top: clamp(118px, 22vw, 136px);
+        width: min(88vw, 480px);
+        height: clamp(240px, 76vw, 400px);
+        aspect-ratio: auto;
+    }
+}
+
+/* 인트로 아래 프로필 영역: 1920px 시안의 720px 스티키 패널과 66px 여백 비율을 유지합니다. */
+.profile-content {
+    display: grid;
+    grid-template-columns: minmax(0, 37.5%) minmax(0, 53.0208333%);
+    column-gap: 3.4375%;
+    align-items: start;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+}
+
+.profile-content__media {
+    position: sticky;
+    top: 0;
+    z-index: 0;
+    width: 37.5%;
+    height: 100vh;
+    height: 100svh;
+    margin-bottom: -100vh;
+    margin-bottom: -100svh;
+    background: #cccccc url('../images/placeholder-profile2.jpg') center / cover no-repeat;
+}
+
+.profile-content__details {
+    grid-column: 2;
+    min-width: 0;
+    padding-block: min(6.25vw, 120px);
+    background: #ffffff;
+}
+
+.profile-about {
+    display: flex;
+    flex-direction: column;
+    gap: min(3.125vw, 60px);
+    max-width: min(50vw, 960px);
+}
+
+.profile-about h2,
+.profile-skills h2 {
+    font-size: clamp(48px, 4.7916667vw, 92px);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.05em;
+}
+
+.profile-about p,
+.profile-skills__intro {
+    font-size: clamp(20px, 2.0833333vw, 40px);
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.035em;
+    word-break: keep-all;
+}
+
+.profile-skills {
+    margin-top: min(7.2916667vw, 140px);
+}
+
+.profile-skills__intro {
+    max-width: min(50vw, 960px);
+    margin-top: min(3.125vw, 60px);
+}
+
+.skill-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: min(3.3333333vw, 64px);
+    margin-top: min(3.125vw, 60px);
+}
+
+.skill-card {
+    min-width: 0;
+}
+
+.skill-card__title {
+    display: flex;
+    align-items: center;
+    gap: min(1.0416667vw, 20px);
+    min-height: 38px;
+}
+
+.skill-card__title img {
+    flex: 0 0 auto;
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+.skill-card h3 {
+    font-size: clamp(24px, 1.6666667vw, 32px);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.04em;
+    white-space: nowrap;
+}
+
+.skill-card p {
+    margin-top: min(1.0416667vw, 20px);
+    font-size: clamp(16px, 1.0416667vw, 20px);
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.035em;
+    word-break: keep-all;
+}
+
+@media (max-width: 1024px) {
+    .profile-content__media {
+        width: 100%;
+    }
+
+    .profile-content {
+        display: block;
+    }
+
+    .profile-content__details {
+        position: relative;
+        z-index: 1;
+        grid-column: auto;
+        padding: 64px 24px;
+        background: #ffffff;
+    }
+
+    .profile-about,
+    .profile-skills__intro {
+        max-width: none;
+    }
+
+    .profile-skills {
+        margin-top: 96px;
+    }
+
+    .skill-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 48px 32px;
+    }
+}
+
+@media (max-width: 640px) {
+    .profile-about {
+        gap: 32px;
+    }
+
+    .profile-about h2,
+    .profile-skills h2 {
+        font-size: clamp(36px, 11.5vw, 48px);
+    }
+
+    .profile-about p,
+    .profile-skills__intro {
+        font-size: 20px;
+    }
+
+    .profile-skills__intro {
+        margin-top: 32px;
+    }
+
+    .skill-list {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        margin-top: 40px;
     }
 }
