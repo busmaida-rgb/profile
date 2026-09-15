@@ -1,0 +1,121 @@
+html {
+    font-family: 'Pretendard', sans-serif;
+    background: #ffffff;
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    background: #ffffff;
+}
+
+/* Figma PC frame: 1920 × 1020 */
+.portfolio-intro {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    height: 100svh;
+    overflow: hidden;
+    background: #ffffff;
+    isolation: isolate;
+}
+
+.hero {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, #ffffff 0 50%, var(--blue) 50% 100%);
+}
+
+.hero__title {
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    margin: 0;
+    transform: translateX(-50%);
+    color: var(--blue);
+    font-size: min(12.5vw, 23.5294118vh);
+    font-weight: 900;
+    line-height: 1.2;
+    letter-spacing: 0;
+    white-space: nowrap;
+}
+
+.hero__title--top {
+    top: 21.9607843%;
+}
+
+.hero__title--bottom {
+    top: 50%;
+    color: #ffffff;
+}
+
+.marquee {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+    font-size: min(2.08333333vw, 3.92156863vh);
+    font-weight: 400;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.marquee--top {
+    top: 0;
+    padding-block: min(0.8333333333vw, 1.568627451vh);
+    color: var(--blue);
+    background: #ffffff;
+}
+
+.marquee--bottom {
+    bottom: 0;
+    padding-block: min(0.8333333333vw, 1.568627451vh);
+    color: #ffffff;
+    background: var(--blue);
+}
+
+.marquee__track {
+    display: flex;
+    flex: none;
+    width: max-content;
+}
+
+.marquee__group {
+    display: flex;
+    flex: none;
+    align-items: center;
+    width: max-content;
+    gap: min(6.66666667vw, 12.5490196vh);
+    padding-right: min(6.66666667vw, 12.5490196vh);
+}
+
+.marquee__track--left {
+    animation: marquee-left calc(26s * var(--marquee-repeat, 1)) linear infinite;
+}
+
+.marquee__track--right {
+    animation: marquee-right calc(26s * var(--marquee-repeat, 1)) linear infinite;
+}
+
+@keyframes marquee-left {
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+@keyframes marquee-right {
+    from {
+        transform: translateX(-50%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .marquee__track {
+        animation-play-state: paused;
+    }
+}
