@@ -3,6 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    // 브라우저가 새로고침 시 이전 스크롤 위치를 복원하지 않도록 먼저 설정합니다.
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+  </script>
   <link rel="stylesheet" href="./css/reset.css">
   <link rel="stylesheet" href="./css/font.css">
   <link rel="stylesheet" href="./css/root.css">
@@ -14,11 +20,21 @@
   <title>최윤성 | UI/UX Designer · Web Publisher</title>
 </head>
 <body>
+  <div class="site-menu">
+    <button class="site-menu__toggle" type="button" aria-expanded="false" aria-controls="site-navigation">MENU</button>
+    <nav id="site-navigation" class="site-menu__links" aria-label="페이지 메뉴" hidden>
+      <a href="#portfolio-title">HOME</a>
+      <a href="#about">ABOUT</a>
+      <a href="#skills">SKILLS</a>
+    </nav>
+  </div>
   <main>
     <div class="profile-content__media" role="img" aria-label="프로필 사진 영역"></div>
 
     <section class="portfolio-intro" aria-labelledby="portfolio-title">
-      <h1 id="portfolio-title" class="portfolio-intro__title">PORTFOLIO</h1>
+      <div class="portfolio-intro__title-sticky">
+        <h1 id="portfolio-title" class="portfolio-intro__title">PORTFOLIO</h1>
+      </div>
 
       <figure class="portfolio-intro__image">
         <img src="./images/placeholder-profile.jpg" alt="최윤성 프로필 사진">
@@ -44,15 +60,17 @@
 
     <section class="profile-content" aria-label="프로필 소개 및 보유 스킬">
       <div class="profile-content__details">
-        <section class="profile-about" aria-labelledby="profile-about-title">
-          <h2 id="profile-about-title">직관적인<br>디자인을 추구합니다.</h2>
-          <p>정보의 우선순위를 명확히 하고 익숙한 위치에 기능을 배치해, 별도의 설명 없이도 어디에 무엇이 있는지 알 수 있는 화면을 만듭니다.</p>
-          <p>읽기 편한 글자와 누르기 쉬운 버튼, 다양한 화면에 맞는 레이아웃으로 사용자가 편안하게 목적을 달성할 수 있도록 디자인합니다.</p>
+        <div class="profile-content__body">
+        <section id="about" class="profile-about" aria-labelledby="profile-about-title">
+          <h2 id="profile-about-title">ABOUT</h2>
+          <div class="profile-about__body">
+            <p>직관적이고 사용자 친화적인 디자인을 추구하는 디자이너 · 퍼블리셔입니다.</p>
+            <p>디자인부터 퍼블리싱까지 웹 페이지 컨텐츠 제작과 UI/UX 디자인, 구현의 전반적인 과정을 다양한 도구를 활용하여 수행할 수 있습니다.</p>
+          </div>
         </section>
 
-        <section class="profile-skills" aria-labelledby="profile-skills-title">
-          <h2 id="profile-skills-title">디자인부터 퍼블리싱까지</h2>
-          <p class="profile-skills__intro">웹 페이지 컨텐츠 제작과 UI/UX 디자인, 구현의 전반적인 과정을 다양한 도구를 활용하여 수행할 수 있습니다.</p>
+        <section id="skills" class="profile-skills" aria-labelledby="profile-skills-title">
+          <h2 id="profile-skills-title">SKILLS</h2>
 
           <ul class="skill-list">
             <li class="skill-card">
@@ -60,42 +78,42 @@
                 <img src="./images/html-5.svg" width="32" height="32" alt="">
                 <h3>HTML5</h3>
               </div>
-              <p>시맨틱 태그를 활용해 페이지의 영역과 정보의 위계를 구성할 수 있습니다. 링크, 목록, 입력 폼 등을 마크업하고, 이미지 대체 텍스트와 폼 레이블을 작성해 기본적인 웹 접근성을 고려합니다.</p>
+              <p>시맨틱 태그를 활용해 콘텐츠의 의미와 구조에 맞는 페이지를 구성할 수 있습니다. 링크, 목록, 입력 폼을 마크업하고, 대체 텍스트와 폼 레이블을 작성해 기본적인 웹 접근성을 고려할 수 있습니다.</p>
             </li>
             <li class="skill-card">
               <div class="skill-card__title">
                 <img src="./images/css3.svg" width="32" height="32" alt="">
                 <h3>CSS3</h3>
               </div>
-              <p>Flex와 Grid를 활용해 레이아웃을 구성하고, 미디어 쿼리로 PC·태블릿·모바일에 대응하는 반응형 페이지를 제작할 수 있습니다. 가상 요소와 transition, animation을 활용해 버튼 효과와 기본적인 모션을 구현합니다.</p>
+              <p>Flex와 Grid를 활용해 레이아웃을 구성하고, 미디어 쿼리로 다양한 화면 크기에 대응하는 반응형 페이지를 제작할 수 있습니다. 가상 요소와 transition, animation을 활용해 시각적 효과와 움직임을 구현할 수 있습니다.</p>
             </li>
             <li class="skill-card">
               <div class="skill-card__title">
                 <img src="./images/javascript.svg" width="32" height="32" alt="">
                 <h3>JavaScript</h3>
               </div>
-              <p>DOM과 이벤트를 활용해 요소의 내용, 스타일, 속성을 변경할 수 있습니다. 탭, 아코디언, 팝업, 모바일 메뉴를 구현하고, Swiper를 활용해 슬라이드와 페이지네이션을 구성할 수 있습니다.</p>
+              <p>DOM과 이벤트를 활용해 사용자의 행동에 반응하는 기능을 구현할 수 있습니다. 탭, 아코디언, 팝업, 모바일 메뉴를 제작하고, Swiper를 활용해 슬라이드와 페이지네이션을 구성할 수 있습니다.</p>
             </li>
             <li class="skill-card">
               <div class="skill-card__title">
                 <img src="./images/figma.svg" width="32" height="32" alt="">
                 <h3>Figma</h3>
               </div>
-              <p>와이어프레임부터 상세 시안까지 제작할 수 있습니다. Auto Layout과 컴포넌트, Variant를 활용해 반복되는 UI를 관리하고, 프로토타입으로 화면 이동과 인터랙션을 표현합니다. 퍼블리싱에 필요한 간격, 크기, 색상 확인과 이미지·아이콘 추출도 가능합니다.</p>
+              <p>와이어프레임부터 상세 디자인까지 화면을 설계할 수 있습니다. Auto Layout과 컴포넌트, Variant로 일관된 UI를 구성하고, 프로토타입을 활용해 화면 이동과 인터랙션을 표현할 수 있습니다.</p>
             </li>
             <li class="skill-card">
               <div class="skill-card__title">
                 <img src="./images/photoshop.svg" width="32" height="32" alt="">
                 <h3>Photoshop</h3>
               </div>
-              <p>이미지의 배경 제거, 색상 보정, 합성, 리터칭을 할 수 있습니다. 레이어와 마스크를 활용해 팝업, 배너, 포스터, 상세페이지를 제작하고, 사용 환경에 맞춰 이미지 크기와 저장 형식을 조정합니다.</p>
+              <p>배경 제거, 색상 보정, 합성, 리터칭으로 이미지를 목적에 맞게 편집할 수 있습니다. 레이어와 마스크를 활용해 팝업, 배너, 포스터, 상세페이지를 제작하고, 웹에 적합한 크기와 형식으로 저장할 수 있습니다.</p>
             </li>
             <li class="skill-card">
               <div class="skill-card__title">
                 <img src="./images/illustrator.svg" width="32" height="32" alt="">
                 <h3>Illustrator</h3>
               </div>
-              <p>펜 도구와 패스파인더를 활용해 로고, 아이콘, 간단한 일러스트를 제작하고 수정할 수 있습니다. 도형과 타이포그래피를 조합해 그래픽을 구성하고, 웹에서 사용할 수 있도록 SVG 등의 형식으로 내보냅니다.</p>
+              <p>펜 도구와 패스파인더를 활용해 로고, 아이콘, 간단한 일러스트를 제작하고 수정할 수 있습니다. 도형과 타이포그래피를 조합해 벡터 그래픽을 구성하고, SVG 등 용도에 맞는 형식으로 내보낼 수 있습니다.</p>
             </li>
             <li class="skill-card">
               <div class="skill-card__title">
@@ -103,17 +121,18 @@
                 <img src="./images/github.svg" width="32" height="32" alt="">
                 <h3>Git / Github</h3>
               </div>
-              <p>커밋으로 변경 내용을 기록하고, 브랜치를 나누어 작업할 수 있습니다. 원격 저장소에 코드를 올리거나 내려받고, Pull Request를 통해 변경 사항을 공유하며 팀 프로젝트에 참여할 수 있습니다.</p>
+              <p>커밋으로 작업 이력을 기록하고, 브랜치를 나누어 변경 사항을 관리할 수 있습니다. 원격 저장소에 코드를 공유하고, Pull Request를 활용해 팀원과 변경 내용을 검토하며 협업할 수 있습니다.</p>
             </li>
             <li class="skill-card">
               <div class="skill-card__title">
                 <img src="./images/chatgpt.svg" width="32" height="32" alt="">
                 <h3>ChatGPT</h3>
               </div>
-              <p>디자인 콘셉트에 맞는 이미지를 생성하고, 배경 제거와 이미지 수정으로 작업에 필요한 시각 자료를 제작할 수 있습니다. HTML·CSS·JavaScript 코드의 초안 작성과 오류 원인 파악에 활용하며, 제안된 코드를 이해하고 실제 동작을 확인해 작업에 적용합니다.</p>
+              <p>디자인 콘셉트에 맞는 이미지를 생성하고, 배경 제거와 이미지 수정으로 필요한 시각 자료를 제작할 수 있습니다. HTML·CSS·JavaScript 코드의 초안 작성과 오류 원인 파악에 활용하고, 제안된 코드를 검토·수정해 작업에 적용할 수 있습니다.</p>
             </li>
           </ul>
         </section>
+        </div>
       </div>
     </section>
   </main>

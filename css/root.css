@@ -1,5 +1,13 @@
 :root{
-    --blue: #1b2cc1;
+    --page-gutter: 80px;
     --beige: #F9F8F6;
     --brown: #8a5f41;
+    --orange: #FF6D1F;
+    --beige2: #F3E9DC;
+}
+
+@media (max-width: 1024px) {
+    :root {
+        --page-gutter: 24px;
+    }
 }

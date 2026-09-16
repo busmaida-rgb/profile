@@ -13,86 +13,227 @@ main {
     position: relative;
 }
 
-/* Figma PC frame: 1920 × 1020 */
+.site-menu {
+    position: fixed;
+    top: 24px;
+    right: var(--page-gutter);
+    z-index: 20;
+}
+
+.site-menu__toggle {
+    padding: 5px 10px;
+    border: 1px solid #000;
+    border-radius: 8px;
+    background: var(--beige);
+    color: #000;
+    font: 700 20px / normal 'Pretendard', sans-serif;
+    cursor: pointer;
+}
+
+.site-menu__links {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    min-width: 160px;
+    padding: 8px;
+    border: 1px solid #000;
+    border-radius: 8px;
+    background: var(--beige);
+}
+
+.site-menu__links a {
+    display: block;
+    padding: 12px;
+    font-weight: 700;
+}
+
+.site-menu__links a:hover {
+    color: var(--orange);
+}
+
+.site-menu :focus-visible {
+    outline: 2px solid var(--orange);
+    outline-offset: 4px;
+}
+
+#about,
+#skills {
+    scroll-margin-top: 60px;
+}
+
+/* 인트로는 현재 보이는 뷰포트 높이를 채웁니다. */
 .portfolio-intro {
+    --title-top: 40px;
+    --intro-marquee-height: clamp(37px, 4.3229167vw, 83px);
+    /* 화면 여백에 맞춰 함께 축소하며 PORTFOLIO : 이름 = 3 : 2를 유지합니다. */
+    --intro-title-size: min(240px, calc((100vw - var(--page-gutter) * 2) * 240 / 1360));
+    --intro-name-size: calc(var(--intro-title-size) * 2 / 3);
+    /* 마퀴만 절반으로 줄여도 사진의 기존 위치와 크기는 유지합니다. */
+    --intro-image-bottom-space: calc(var(--intro-marquee-height) * 2);
+    /* 1100px~768px 구간만 축소하고, 모바일에서는 사진 크기를 유지합니다. */
+    --image-width: clamp(calc(768px * 9 / 11), calc(100vw * 9 / 11), 900px);
+    --image-height: min(calc(var(--image-width) * 2 / 3), max(0px, calc(100% - var(--intro-image-bottom-space) - 48px)));
+    --intro-content-offset: calc(clamp(48px, 4.1666667vw, 80px) + 40px);
+    --image-center-y: min(calc((100% - var(--intro-image-bottom-space)) / 2 + var(--intro-content-offset)), calc(100% - var(--intro-marquee-height) - var(--image-height) / 2 - 24px));
     position: relative;
     z-index: 1;
     width: 100%;
-    height: clamp(620px, 53.125vw, 1020px);
-    overflow: hidden;
+    height: 100vh;
+    height: 100dvh;
+    /* 스크롤 컨테이너를 만들지 않고 잘라내어 내부 sticky가 작동하게 합니다. */
+    overflow: clip;
     background: var(--beige);
     isolation: isolate;
 }
 
+.portfolio-intro__title-sticky {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    /* 마퀴가 제목 전체를 덮을 때까지 상단에 머물도록 높이를 비웁니다. */
+    height: 0;
+}
+
 .portfolio-intro__title {
     position: absolute;
-    z-index: 1;
-    top: 0;
+    z-index: 3;
+    top: var(--title-top);
     left: 50%;
     margin: 0;
     transform: translateX(-50%);
     color: #000000;
-    font-size: clamp(52px, 12.5vw, 240px);
+    /* 제목과 공통 좌우 여백을 확보할 수 있을 때만 최대 크기를 사용합니다. */
+    font-size: var(--intro-title-size);
     font-weight: 900;
     line-height: normal;
     letter-spacing: 0;
     white-space: nowrap;
+    animation: portfolio-title-enter 1600ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .portfolio-intro__image {
     position: absolute;
     z-index: 2;
-    top: min(10.9375vw, 210px);
+    /* 사진을 아래로 내리되 마퀴 위 24px 간격을 확보합니다. */
+    top: var(--image-center-y);
     left: 50%;
-    width: min(46.875vw, 900px);
-    aspect-ratio: 3 / 2;
+    /* 사진을 보여주는 영역에 공통 좌우 여백을 확보합니다. */
+    width: min(var(--image-width), calc(100% - var(--page-gutter) * 2));
+    /* 낮은 화면에서도 사진과 마퀴 사이에 24px 간격을 확보합니다. */
+    height: var(--image-height);
     margin: 0;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
+    /* 등장 애니메이션의 transform과 스크롤 이동을 분리합니다. */
+    translate: 0 var(--intro-photo-scroll, 0px);
     overflow: hidden;
+    /* 글자 이동이 끝나기 0.2초 전에 이어서 등장합니다. */
+    animation: profile-image-enter 650ms 1400ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .portfolio-intro__image img {
+    position: relative;
+    left: 50%;
     display: block;
-    width: 100%;
+    width: var(--image-width);
+    max-width: none;
     height: 100%;
+    transform: translateX(-50%);
     object-fit: cover;
+}
+
+@keyframes portfolio-title-enter {
+    0% {
+        top: max(50vh, calc(var(--title-top) + var(--intro-title-size) * 0.6));
+        top: max(50dvh, calc(var(--title-top) + var(--intro-title-size) * 0.6));
+        transform: translate(-50%, -50%);
+        opacity: 0;
+    }
+
+    /* 전체 1.6초 중 0.9초 동안 중앙에서 페이드 인합니다. */
+    56.25% {
+        top: max(50vh, calc(var(--title-top) + var(--intro-title-size) * 0.6));
+        top: max(50dvh, calc(var(--title-top) + var(--intro-title-size) * 0.6));
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
+
+    100% {
+        top: var(--title-top);
+        transform: translateX(-50%);
+        opacity: 1;
+    }
+}
+
+@keyframes profile-image-enter {
+    from {
+        transform: translate(-50%, calc(-50% - 24px));
+        opacity: 0;
+    }
+
+    to {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
 }
 
 .portfolio-intro__name {
     position: absolute;
     z-index: 2;
-    top: min(36.09375vw, 693px);
-    left: 50%;
+    /* Figma: 사진 오른쪽 아래에 겹치는 검정 이름. 좁은 화면에서는 여백 안에 둡니다. */
+    top: min(calc(var(--image-center-y) + var(--image-height) / 2 - 0.8em), calc(100% - var(--intro-marquee-height) - 1.2em - 24px));
+    right: max(var(--page-gutter), calc((100% - var(--image-width)) / 2 - 1.3125em));
     margin: 0;
-    transform: translateX(-50%);
-    color: #ffffff;
-    font-size: clamp(32px, 4.1666667vw, 80px);
+    color: #000000;
+    font-size: var(--intro-name-size);
     font-weight: 900;
-    line-height: normal;
+    line-height: 1.2;
     letter-spacing: 0;
     white-space: nowrap;
 }
 
-/* Figma 기준: 1920 × 1020px, 글자 80px, 상하 여백 10px, 간격 60px */
+/* Figma 기준: 1920 × 1020px, 영역 83px, 글자 40px, 간격 60px */
 .marquee {
     position: absolute;
     z-index: 2;
     display: flex;
     width: 100%;
-    height: clamp(74px, 8.6458333vw, 166px);
+    height: clamp(37px, 4.3229167vw, 83px);
     align-items: center;
     overflow: hidden;
     padding-block: clamp(6px, 0.5208333vw, 10px);
-    font-size: clamp(32px, 4.1666667vw, 80px);
+    font-size: clamp(16px, 2.0833333vw, 40px);
     font-weight: 900;
     line-height: normal;
     white-space: nowrap;
+    text-transform: uppercase;
 }
 
 .marquee--intro {
+    z-index: 4;
     bottom: 0;
+    height: var(--intro-marquee-height);
     color: #ffffff;
-    background: var(--brown);
+    background: var(--orange);
+}
+
+.portfolio-intro__name {
+    /* 사진 등장이 끝나기 0.1초 전에 이름을 이어서 표시합니다. */
+    animation: marquee-fade-in 400ms 1950ms ease-in-out both;
+}
+
+.marquee--intro {
+    /* 이름 페이드 인이 완료되면 마퀴를 표시합니다. */
+    animation: marquee-fade-in 450ms 2350ms ease-in-out both;
+}
+
+@keyframes marquee-fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 .marquee__track {
@@ -124,90 +265,87 @@ main {
     .marquee__track {
         animation-play-state: paused;
     }
+
+    .portfolio-intro__title,
+    .portfolio-intro__image,
+    .portfolio-intro__name,
+    .marquee--intro {
+        animation: none;
+    }
+
+    .portfolio-intro__image {
+        translate: none;
+    }
 }
 
 @media (min-width: 769px) and (max-width: 1200px) {
     .portfolio-intro {
-        height: clamp(700px, 68.3333333vw, 820px);
-    }
-
-    .portfolio-intro__title {
-        font-size: clamp(96px, 12.5vw, 150px);
-    }
-
-    .portfolio-intro__image {
-        top: clamp(130px, 15vw, 180px);
-        width: clamp(600px, 62.5vw, 750px);
-    }
-
-    .portfolio-intro__name {
-        top: auto;
-        bottom: clamp(120px, 14vw, 170px);
-        font-size: clamp(52px, 6.6666667vw, 80px);
+        --intro-marquee-height: clamp(48px, 5vw, 60px);
     }
 
     .marquee {
-        height: clamp(96px, 10vw, 120px);
-        font-size: clamp(48px, 6.6666667vw, 80px);
+        font-size: clamp(24px, 3.3333333vw, 40px);
+    }
+}
+
+/* 글꼴 로딩 및 JS 실행 전에도 메뉴 아래 공간을 확보합니다. */
+@media (max-width: 1700px) {
+    .portfolio-intro {
+        --title-top: 84px;
     }
 }
 
 @media (max-width: 768px) {
     .portfolio-intro {
-        height: clamp(520px, 80vw, 620px);
-    }
-
-    .portfolio-intro__title {
-        top: 20px;
-        font-size: clamp(52px, 13vw, 100px);
-    }
-
-    .portfolio-intro__image {
-        top: clamp(118px, 18vw, 136px);
-        width: min(78vw, 460px);
-    }
-
-    .portfolio-intro__name {
-        top: auto;
-        bottom: 112px;
-        font-size: clamp(32px, 8vw, 52px);
+        --intro-marquee-height: 46px;
     }
 
     .marquee {
-        height: 92px;
-        font-size: clamp(30px, 8vw, 48px);
+        font-size: clamp(15px, 4vw, 24px);
     }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 900px) {
     .portfolio-intro {
-        height: clamp(540px, 105vw, 660px);
+        /* 사진 아래에 이름 높이와 위아래 24px 여백을 확보합니다. */
+        --intro-name-space: calc(var(--intro-name-size) * 1.2 + 48px);
+        --image-height: min(calc(var(--image-width) * 2 / 3), max(0px, calc(100% - var(--intro-marquee-height) - var(--intro-name-space) - 24px)));
+        --image-center-y: min(calc((100% - var(--intro-image-bottom-space)) / 2 + var(--intro-content-offset)), calc(100% - var(--intro-marquee-height) - var(--intro-name-space) - var(--image-height) / 2));
     }
 
-    .portfolio-intro__image {
-        top: clamp(118px, 22vw, 136px);
-        width: min(88vw, 480px);
-        height: clamp(240px, 76vw, 400px);
-        aspect-ratio: auto;
+    .portfolio-intro__name {
+        /* 사진 하단과 마퀴 상단 사이 빈 공간의 가로·세로 중앙에 배치합니다. */
+        top: calc((var(--image-center-y) + var(--image-height) / 2 + 100% - var(--intro-marquee-height)) / 2);
+        right: auto;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
     }
 }
 
-/* 인트로 아래 프로필 영역: 1920px 시안의 720px 스티키 패널과 66px 여백 비율을 유지합니다. */
+/* 프로필 콘텐츠는 공통 좌우 여백 안에 배치합니다. */
 .profile-content {
+    --panel-inset: 40px;
+    --panel-padding: 40px;
     display: grid;
-    grid-template-columns: minmax(0, 37.5%) minmax(0, 53.0208333%);
-    column-gap: 3.4375%;
+    grid-template-columns: minmax(0, calc(41.6666667vw - var(--page-gutter) * 2)) minmax(0, 1fr);
+    column-gap: var(--page-gutter);
     align-items: start;
     position: relative;
-    z-index: 1;
+    z-index: 2;
     width: 100%;
+    /* 마퀴 아래에 여백을 확보해 ABOUT 배경이 인트로와 겹치지 않게 합니다. */
+    margin-top: var(--panel-inset);
+    padding-inline: var(--page-gutter);
+    padding-bottom: calc(var(--panel-inset) * 2);
 }
 
 .profile-content__media {
     position: sticky;
     top: 0;
     z-index: 0;
-    width: 37.5%;
+    width: 39.375%;
+    margin-left: 0;
     height: 100vh;
     height: 100svh;
     margin-bottom: -100vh;
@@ -218,39 +356,83 @@ main {
 .profile-content__details {
     grid-column: 2;
     min-width: 0;
-    padding-block: min(6.25vw, 120px);
+    display: grid;
+    position: relative;
+    isolation: isolate;
+    /* 등장과 퇴장 모두 화면 위아래 여백 안에서 둥근 경계를 유지합니다. */
+    clip-path: inset(var(--panel-reveal-top, 0px) 0 var(--panel-reveal-bottom, 0px) 0 round 20px);
+}
+
+/* 배경만 고정하고 본문은 페이지 스크롤에 따라 이동합니다. */
+.profile-content__details::before {
+    content: '';
+    grid-area: 1 / 1;
+    position: sticky;
+    top: var(--panel-inset);
+    align-self: start;
+    height: calc(100vh - var(--panel-inset) * 2);
+    height: calc(100dvh - var(--panel-inset) * 2);
+    max-height: 100%;
+    border-radius: 20px;
+    background: var(--beige2);
+    z-index: -1;
+}
+
+.profile-content__body {
+    grid-area: 1 / 1;
+    min-width: 0;
+    padding: var(--panel-padding);
+    padding-block: 40px;
+    clip-path: inset(var(--panel-clip-top, 40px) 0 var(--panel-clip-bottom, 40px));
 }
 
 .profile-about {
     display: flex;
     flex-direction: column;
     gap: min(3.125vw, 60px);
-    max-width: min(50vw, 960px);
+    min-height: 0;
+}
+
+.profile-about__body {
+    display: flex;
+    flex-direction: column;
+    gap: min(2.0833333vw, 40px);
 }
 
 .profile-about h2,
 .profile-skills h2 {
-    font-size: clamp(48px, 4.7916667vw, 92px);
-    font-weight: 700;
-    line-height: 1.2;
-    letter-spacing: -0.05em;
+    font-size: clamp(48px, 4.1666667vw, 80px);
+    font-weight: 900;
+    line-height: normal;
+    letter-spacing: 0;
 }
 
 .profile-about p,
 .profile-skills__intro {
     font-size: clamp(20px, 2.0833333vw, 40px);
     font-weight: 400;
-    line-height: 1.5;
-    letter-spacing: -0.035em;
+    line-height: normal;
+    letter-spacing: 0;
     word-break: keep-all;
 }
 
 .profile-skills {
-    margin-top: min(7.2916667vw, 140px);
+    margin-top: min(3.125vw, 60px);
+    padding-top: min(3.125vw, 60px);
+    position: relative;
+}
+
+.profile-skills::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: url('../images/section-divider.svg') center / 100% 2px no-repeat;
 }
 
 .profile-skills__intro {
-    max-width: min(50vw, 960px);
     margin-top: min(3.125vw, 60px);
 }
 
@@ -282,8 +464,8 @@ main {
 .skill-card h3 {
     font-size: clamp(24px, 1.6666667vw, 32px);
     font-weight: 700;
-    line-height: 1.2;
-    letter-spacing: -0.04em;
+    line-height: normal;
+    letter-spacing: 0;
     white-space: nowrap;
 }
 
@@ -291,25 +473,82 @@ main {
     margin-top: min(1.0416667vw, 20px);
     font-size: clamp(16px, 1.0416667vw, 20px);
     font-weight: 400;
-    line-height: 1.5;
-    letter-spacing: -0.035em;
+    line-height: normal;
+    letter-spacing: 0;
     word-break: keep-all;
 }
 
+@media (min-width: 1025px) and (max-width: 1440px) {
+    .skill-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        column-gap: 24px;
+    }
+
+    .skill-card__title {
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+}
+
 @media (max-width: 1024px) {
+    main {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .portfolio-intro {
+        order: 1;
+        flex-shrink: 0;
+    }
+
+    .site-menu {
+        top: 24px;
+    }
+
+    .profile-about {
+        min-height: 0;
+    }
+
+    .profile-about__body {
+        gap: 24px;
+    }
+
     .profile-content__media {
-        width: 100%;
+        order: 2;
+        top: 24px;
+        flex-shrink: 0;
+        width: calc(100% - var(--page-gutter) * 2);
+        height: auto;
+        max-height: 720px;
+        aspect-ratio: 354 / 572;
+        margin: 24px var(--page-gutter) 0;
+        border-radius: 20px;
+        clip-path: inset(var(--media-clip-top, 0px) 0 var(--media-clip-bottom, 0px) 0 round 20px);
     }
 
     .profile-content {
+        order: 3;
+        --panel-inset: 24px;
+        --panel-padding: 24px;
         display: block;
+        padding-inline: var(--page-gutter);
+    }
+
+    /* ABOUT보다 24px 먼저 올라오는 배경으로 스티키 사진의 하단을 가립니다. */
+    .profile-content::before {
+        content: '';
+        position: absolute;
+        inset: calc(-1 * var(--panel-inset)) 0 0;
+        z-index: -1;
+        background: var(--beige);
+        pointer-events: none;
     }
 
     .profile-content__details {
         position: relative;
         z-index: 1;
         grid-column: auto;
-        padding: 64px 24px;
+        padding: 0;
     }
 
     .profile-about,
@@ -318,7 +557,8 @@ main {
     }
 
     .profile-skills {
-        margin-top: 96px;
+        margin-top: 40px;
+        padding-top: 40px;
     }
 
     .skill-list {
