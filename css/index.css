@@ -19,6 +19,8 @@ main {
     top: 40px;
     right: var(--page-gutter);
     z-index: 20;
+    /* 마퀴의 페이드 인(2350ms + 450ms)이 끝난 뒤 메뉴를 표시합니다. */
+    animation: menu-fade-in 450ms 2800ms ease-in-out both;
 }
 
 .site-menu__toggle {
@@ -237,6 +239,18 @@ main {
     }
 }
 
+@keyframes menu-fade-in {
+    from {
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    to {
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
 .marquee__track {
     display: flex;
     flex: none;
@@ -267,6 +281,7 @@ main {
         animation-play-state: paused;
     }
 
+    .site-menu,
     .portfolio-intro__title,
     .portfolio-intro__image,
     .portfolio-intro__name,
@@ -336,8 +351,6 @@ main {
 
     .portfolio-intro__image {
         width: var(--image-width);
-        /* 스크롤 중에도 사진이 이름 영역으로 내려오지 않게 합니다. */
-        translate: none;
         animation-name: marquee-fade-in;
     }
 
@@ -374,7 +387,7 @@ main {
     height: 100svh;
     margin-bottom: -100vh;
     margin-bottom: -100svh;
-    background: #cccccc url('../images/placeholder-profile2.jpg') center / cover no-repeat;
+    background: url('../images/placeholder-profile2.jpg') center / cover no-repeat;
 }
 
 .profile-content__details {

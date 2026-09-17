@@ -228,23 +228,20 @@ document.querySelectorAll('.marquee').forEach((marquee) => {
     reducedMotion.addEventListener('change', stopSmoothScroll);
 })();
 
-// 인트로 사진은 스크롤 거리의 30%만큼 따라오며 마퀴 뒤로 32px까지 겹칩니다.
+// PC와 모바일 모두 인트로 사진이 스크롤 거리의 30%만큼 계속 따라옵니다.
 (() => {
     const intro = document.querySelector('.portfolio-intro');
     const photo = intro?.querySelector('.portfolio-intro__image');
-    const marquee = intro?.querySelector('.marquee--intro');
-    if (!intro || !photo || !marquee) return;
+    if (!intro || !photo) return;
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const followRatio = 0.3;
-    const marqueeOverlap = 32;
-    let maxOffset = 0;
     let frame;
 
     function updatePhoto() {
         frame = undefined;
         const scrolled = Math.max(0, -intro.getBoundingClientRect().top);
-        const offset = reducedMotion.matches ? 0 : Math.min(scrolled * followRatio, maxOffset);
+        const offset = reducedMotion.matches ? 0 : scrolled * followRatio;
         photo.style.setProperty('--intro-photo-scroll', `${offset}px`);
     }
 
@@ -253,22 +250,12 @@ document.querySelectorAll('.marquee').forEach((marquee) => {
         frame = window.requestAnimationFrame(updatePhoto);
     }
 
-    function measureSpace() {
-        // offsetTop/Height는 등장 애니메이션이나 translate의 영향을 받지 않습니다.
-        const photoBottom = photo.offsetTop + photo.offsetHeight / 2;
-        const bottomLimit = marquee.offsetTop + marqueeOverlap;
-        // 이름 영역에서도 멈추지 않고, 앞에 표시되는 이름과 마퀴 뒤로 이동합니다.
-        maxOffset = Math.max(0, bottomLimit - photoBottom);
-        scheduleUpdate();
-    }
-
     window.addEventListener('scroll', scheduleUpdate, { passive: true });
-    window.addEventListener('resize', measureSpace, { passive: true });
-    window.addEventListener('pageshow', measureSpace);
+    window.addEventListener('resize', scheduleUpdate, { passive: true });
+    window.addEventListener('pageshow', scheduleUpdate);
     reducedMotion.addEventListener('change', scheduleUpdate);
 
-    const resizeObserver = new ResizeObserver(measureSpace);
-    [intro, photo, marquee].forEach((element) => resizeObserver.observe(element));
-    document.fonts.ready.then(measureSpace);
-    measureSpace();
+    new ResizeObserver(scheduleUpdate).observe(intro);
+    document.fonts.ready.then(scheduleUpdate);
+    scheduleUpdate();
 })();
