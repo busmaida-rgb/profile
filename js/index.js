@@ -59,28 +59,6 @@
     updateClip();
 })();
 
-// 실제 글꼴과 화면 너비에 맞춰 제목과 고정 메뉴 사이에 24px을 확보합니다.
-(() => {
-    const intro = document.querySelector('.portfolio-intro');
-    const title = document.querySelector('.portfolio-intro__title');
-    const menuButton = document.querySelector('.site-menu__toggle');
-    if (!intro || !title || !menuButton) return;
-
-    function updateTitleSpace() {
-        const button = menuButton.getBoundingClientRect();
-        // 등장 애니메이션의 위치와 무관한 제목의 최종 오른쪽 경계입니다.
-        const titleRight = (intro.clientWidth + title.offsetWidth) / 2;
-        const titleTop = titleRight + 24 > button.left ? Math.ceil(button.bottom + 24) : 40;
-        intro.style.setProperty('--title-top', `${titleTop}px`);
-    }
-
-    const observer = new ResizeObserver(updateTitleSpace);
-    [intro, title, menuButton].forEach((element) => observer.observe(element));
-    window.addEventListener('resize', updateTitleSpace, { passive: true });
-    document.fonts.ready.then(updateTitleSpace);
-    updateTitleSpace();
-})();
-
 // 고정 메뉴: 섹션 이동 후 닫고, Escape 및 바깥 클릭도 지원합니다.
 (() => {
     const menu = document.querySelector('.site-menu');

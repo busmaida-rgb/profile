@@ -15,16 +15,16 @@ main {
 
 .site-menu {
     position: fixed;
-    top: 24px;
+    top: 40px;
     right: var(--page-gutter);
     z-index: 20;
 }
 
 .site-menu__toggle {
-    padding: 5px 10px;
-    border: 1px solid #000;
-    border-radius: 8px;
-    background: var(--beige);
+    padding: 5px 20px;
+    border: 2px solid #000;
+    border-radius: 100px;
+    opacity: 0.7;
     color: #000;
     font: 700 20px / normal 'Pretendard', sans-serif;
     cursor: pointer;
@@ -288,13 +288,6 @@ main {
     }
 }
 
-/* 글꼴 로딩 및 JS 실행 전에도 메뉴 아래 공간을 확보합니다. */
-@media (max-width: 1700px) {
-    .portfolio-intro {
-        --title-top: 84px;
-    }
-}
-
 @media (max-width: 768px) {
     .portfolio-intro {
         --intro-marquee-height: 46px;
@@ -305,21 +298,50 @@ main {
     }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
     .portfolio-intro {
-        /* 사진 아래에 이름 높이와 위아래 24px 여백을 확보합니다. */
+        --image-width: min(900px, calc(100vw - var(--page-gutter) * 2));
+        --image-height: min(calc(var(--image-width) * 2 / 3), 40svh);
+        --intro-title-space: calc(var(--intro-title-size) * 1.2 + 48px);
         --intro-name-space: calc(var(--intro-name-size) * 1.2 + 48px);
-        --image-height: min(calc(var(--image-width) * 2 / 3), max(0px, calc(100% - var(--intro-marquee-height) - var(--intro-name-space) - 24px)));
-        --image-center-y: min(calc((100% - var(--intro-image-bottom-space)) / 2 + var(--intro-content-offset)), calc(100% - var(--intro-marquee-height) - var(--intro-name-space) - var(--image-height) / 2));
+        display: grid;
+        grid-template-rows: minmax(var(--intro-title-space), 1fr) var(--image-height) minmax(var(--intro-name-space), 1fr) var(--intro-marquee-height);
+        justify-items: center;
+        /* 낮은 가로 화면에서도 각 행의 최소 높이를 보장합니다. */
+        min-height: calc(var(--intro-title-space) + var(--image-height) + var(--intro-name-space) + var(--intro-marquee-height));
     }
 
+    .portfolio-intro__title-sticky {
+        position: static;
+        display: grid;
+        place-items: center;
+        width: 100%;
+        height: 100%;
+    }
+
+    .portfolio-intro__title,
+    .portfolio-intro__image,
     .portfolio-intro__name {
-        /* 사진 하단과 마퀴 상단 사이 빈 공간의 가로·세로 중앙에 배치합니다. */
-        top: calc((var(--image-center-y) + var(--image-height) / 2 + 100% - var(--intro-marquee-height)) / 2);
-        right: auto;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        position: static;
+        transform: none;
+        align-self: center;
         text-align: center;
+    }
+
+    .portfolio-intro__title {
+        line-height: 1.2;
+        animation-name: marquee-fade-in;
+    }
+
+    .portfolio-intro__image {
+        width: var(--image-width);
+        /* 스크롤 중에도 사진이 이름 영역으로 내려오지 않게 합니다. */
+        translate: none;
+        animation-name: marquee-fade-in;
+    }
+
+    .marquee--intro {
+        position: static;
     }
 }
 
@@ -407,9 +429,8 @@ main {
     letter-spacing: 0;
 }
 
-.profile-about p,
-.profile-skills__intro {
-    font-size: clamp(20px, 2.0833333vw, 40px);
+.profile-about p {
+    font-size: 24px;
     font-weight: 400;
     line-height: normal;
     letter-spacing: 0;
@@ -579,7 +600,7 @@ main {
 
     .profile-about p,
     .profile-skills__intro {
-        font-size: 20px;
+        font-size: 16px;
     }
 
     .profile-skills__intro {
