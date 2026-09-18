@@ -7,6 +7,7 @@
     const mobileLayout = window.matchMedia('(max-width: 1024px)');
     if (!panel || !body) return;
     let frame;
+    let mediaOffset = 0;
 
     function updateClip() {
         frame = undefined;
@@ -30,10 +31,14 @@
         body.style.setProperty('--panel-clip-top', `${contentTop}px`);
         body.style.setProperty('--panel-clip-bottom', `${bodyRect.height - contentBottom}px`);
         if (media && content) {
+            // 사진의 하단이 소개·스킬 패널 끝에 닿으면 함께 위로 이동합니다.
+            const stickyBottom = media.getBoundingClientRect().bottom - mediaOffset;
+            mediaOffset = Math.min(0, rect.bottom - stickyBottom);
+            media.style.setProperty('--media-end-offset', `${mediaOffset}px`);
             if (mobileLayout.matches) {
                 const mediaRect = media.getBoundingClientRect();
                 const maskTop = content.getBoundingClientRect().top + parseFloat(getComputedStyle(content, '::before').top);
-                // 가려지고 남은 사진 영역의 하단에도 둥근 모서리를 유지합니다.
+                // 본문에 가려지는 사진 영역을 잘라냅니다.
                 const mediaInset = parseFloat(getComputedStyle(media).top);
                 const clippedTop = Math.min(mediaRect.height, Math.max(0, mediaInset - mediaRect.top));
                 const clipped = Math.min(mediaRect.height - clippedTop, Math.max(0, mediaRect.bottom - maskTop));

@@ -51,11 +51,11 @@ main {
 }
 
 .site-menu__links a:hover {
-    color: var(--orange);
+    color: var(--main);
 }
 
 .site-menu :focus-visible {
-    outline: 2px solid var(--orange);
+    outline: 2px solid var(--main);
     outline-offset: 4px;
 }
 
@@ -216,7 +216,7 @@ main {
     bottom: 0;
     height: var(--intro-marquee-height);
     color: #ffffff;
-    background: var(--orange);
+    background: var(--main);
 }
 
 .portfolio-intro__name {
@@ -387,6 +387,7 @@ main {
     height: 100svh;
     margin-bottom: -100vh;
     margin-bottom: -100svh;
+    translate: 0 var(--media-end-offset, 0px);
     background: url('../images/placeholder-profile2.jpg') center / cover no-repeat;
 }
 
@@ -396,8 +397,8 @@ main {
     display: grid;
     position: relative;
     isolation: isolate;
-    /* 등장과 퇴장 모두 화면 위아래 여백 안에서 둥근 경계를 유지합니다. */
-    clip-path: inset(var(--panel-reveal-top, 0px) 0 var(--panel-reveal-bottom, 0px) 0 round 20px);
+    /* 등장과 퇴장 모두 화면 위아래 여백 안에서 경계를 유지합니다. */
+    clip-path: inset(var(--panel-reveal-top, 0px) 0 var(--panel-reveal-bottom, 0px) 0);
 }
 
 /* 배경만 고정하고 본문은 페이지 스크롤에 따라 이동합니다. */
@@ -410,8 +411,7 @@ main {
     height: calc(100vh - var(--panel-inset) * 2);
     height: calc(100dvh - var(--panel-inset) * 2);
     max-height: 100%;
-    border-radius: 20px;
-    background: var(--beige2);
+    background: var(--main2);
     z-index: -1;
 }
 
@@ -465,7 +465,11 @@ main {
     left: 0;
     width: 100%;
     height: 2px;
-    background: url('../images/section-divider.svg') center / 100% 2px no-repeat;
+    background: repeating-linear-gradient(
+        to right,
+        var(--main) 0 6px,
+        transparent 6px 12px
+    );
 }
 
 .profile-skills__intro {
@@ -558,8 +562,7 @@ main {
         max-height: 720px;
         aspect-ratio: 354 / 572;
         margin: 24px var(--page-gutter) 0;
-        border-radius: 20px;
-        clip-path: inset(var(--media-clip-top, 0px) 0 var(--media-clip-bottom, 0px) 0 round 20px);
+        clip-path: inset(var(--media-clip-top, 0px) 0 var(--media-clip-bottom, 0px) 0);
     }
 
     .profile-content {
