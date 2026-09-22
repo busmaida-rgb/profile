@@ -4,7 +4,7 @@
     z-index: 3;
     order: 4;
     width: 100%;
-    padding-block: 40px;
+    padding-block: 80px;
     background: var(--sage);
 }
 
@@ -19,6 +19,17 @@
 .website-projects__heading h2 {
     font-size: clamp(40px, 4.166667vw, 80px);
     line-height: 1.25;
+}
+
+@keyframes projects-heading-reveal {
+    from { clip-path: inset(0 50% 0 50%); }
+    to { clip-path: inset(0 0 0 0); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .website-projects__heading.is-revealed {
+        animation: projects-heading-reveal 1100ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
 }
 
 .website-projects__track {
@@ -40,7 +51,7 @@
     flex-direction: column;
     gap: 20px;
     padding: 20px;
-    background: var(--project-card);
+    background: var(--sage2);
 }
 
 .website-project__number { font-size: 40px; line-height: 1.25; }
@@ -484,7 +495,7 @@ main {
     }
 
     .portfolio-intro__title-sticky {
-        position: static;
+        position: relative;
         display: grid;
         place-items: center;
         width: 100%;
@@ -501,8 +512,11 @@ main {
     }
 
     .portfolio-intro__title {
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
         line-height: 1.2;
-        animation-name: marquee-fade-in;
+        animation-name: portfolio-title-enter-mobile;
     }
 
     .portfolio-intro__image {
@@ -512,6 +526,27 @@ main {
 
     .marquee--intro {
         position: static;
+    }
+}
+
+@keyframes portfolio-title-enter-mobile {
+    0%, 56.25% {
+        top: 50vh;
+        top: 50dvh;
+        transform: translate(-50%, -50%);
+    }
+
+    0% {
+        opacity: 0;
+    }
+
+    56.25%, 100% {
+        opacity: 1;
+    }
+
+    100% {
+        top: 50%;
+        transform: translate(-50%, -50%);
     }
 }
 

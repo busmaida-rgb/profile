@@ -1,3 +1,31 @@
+// clip-path의 영향을 받지 않는 레이아웃 좌표로 진입·이탈을 확인합니다.
+(() => {
+    const heading = document.querySelector('.website-projects__heading');
+    if (!heading) return;
+    let frame;
+
+    function updateReveal() {
+        frame = undefined;
+        const rect = heading.getBoundingClientRect();
+        const visible = rect.bottom > 0 && rect.top < window.innerHeight
+            && rect.right > 0 && rect.left < window.innerWidth;
+        // 완전히 나가면 클래스를 제거하여 다음 진입 시 다시 재생합니다.
+        heading.classList.toggle('is-revealed', visible);
+    }
+
+    function scheduleReveal() {
+        if (frame !== undefined) return;
+        frame = requestAnimationFrame(updateReveal);
+    }
+
+    window.addEventListener('scroll', scheduleReveal, { passive: true });
+    window.addEventListener('resize', scheduleReveal, { passive: true });
+    window.addEventListener('pageshow', scheduleReveal);
+    window.addEventListener('load', scheduleReveal, { once: true });
+    document.fonts.ready.then(scheduleReveal);
+    scheduleReveal();
+})();
+
 // PC에서만 섹션을 고정하고 세로 스크롤 거리를 가로 이동으로 변환합니다.
 (() => {
     const section = document.querySelector('.website-projects');
