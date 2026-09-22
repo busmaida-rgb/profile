@@ -1,6 +1,163 @@
-html {
-    font-family: 'Pretendard', sans-serif;
-    background: var(--beige);
+/* Website projects: 기본 세로 배치, GSAP 초기화 후 PC 가로 배치 */
+.website-projects {
+    position: relative;
+    z-index: 3;
+    order: 4;
+    width: 100%;
+    padding-block: 40px;
+    background: var(--sage);
+}
+
+.website-projects__heading {
+    width: min(1280px, calc(100% - var(--page-gutter) * 2));
+    margin: 0 auto 80px;
+    padding-bottom: 40px;
+    border-bottom: 2px solid var(--main);
+    text-align: center;
+}
+
+.website-projects__heading h2 {
+    font-size: clamp(40px, 4.166667vw, 80px);
+    line-height: 1.25;
+}
+
+.website-projects__track {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+    padding-inline: var(--page-gutter);
+}
+
+.website-project {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 0;
+}
+
+.website-project__info {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    background: var(--project-card);
+}
+
+.website-project__number { font-size: 40px; line-height: 1.25; }
+.website-project__info h3 { font-size: 20px; font-weight: 600; line-height: 1.2; }
+.website-project__type { margin-top: 10px; font-size: 16px; line-height: 1.2; }
+
+.website-project__thumbnail {
+    position: relative;
+    display: block;
+    min-width: 0;
+    aspect-ratio: 1920 / 945;
+    overflow: hidden;
+}
+
+.website-project__thumbnail picture,
+.website-project__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.website-project__image { object-fit: cover; }
+.website-project__external {
+    position: absolute;
+    z-index: 1;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    background: rgb(0 0 0 / 70%);
+}
+
+.website-project__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: rgb(0 0 0 / 70%);
+    color: #fff;
+    font-size: clamp(24px, 2.083333vw, 40px);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.website-project__overlay img { width: 1em; height: 1em; }
+.website-project__thumbnail:focus-visible { outline: 3px solid #000; outline-offset: 5px; }
+
+@media (min-width: 1025px) {
+    .website-projects.is-horizontal {
+        --project-scale: min(1px, calc(100vw / 1920), calc(100dvh / 1080));
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: calc(80 * var(--project-scale));
+        height: 100vh;
+        height: 100dvh;
+        padding-block: 0;
+        overflow: clip;
+    }
+
+    .is-horizontal .website-projects__heading {
+        flex: none;
+        width: calc(1280 * var(--project-scale));
+        margin-bottom: 0;
+        padding-bottom: calc(40 * var(--project-scale));
+    }
+
+    .is-horizontal .website-projects__heading h2 { font-size: calc(80 * var(--project-scale)); }
+    .is-horizontal .website-projects__viewport { width: 100%; }
+    .is-horizontal .website-projects__track {
+        flex-direction: row;
+        gap: calc(120 * var(--project-scale));
+        width: max-content;
+        will-change: transform;
+    }
+
+    .is-horizontal .website-project {
+        flex: none;
+        flex-direction: row;
+        gap: calc(40 * var(--project-scale));
+        height: calc(630 * var(--project-scale));
+    }
+
+    .is-horizontal .website-project__info {
+        flex: none;
+        gap: calc(40 * var(--project-scale));
+        padding: calc(40 * var(--project-scale)) calc(80 * var(--project-scale)) calc(40 * var(--project-scale)) calc(40 * var(--project-scale));
+        white-space: nowrap;
+    }
+
+    .is-horizontal .website-project__number { font-size: calc(80 * var(--project-scale)); }
+    .is-horizontal .website-project__info h3 { font-size: calc(40 * var(--project-scale)); }
+    .is-horizontal .website-project__type { margin-top: calc(20 * var(--project-scale)); font-size: calc(32 * var(--project-scale)); }
+    .is-horizontal .website-project__thumbnail { flex: none; width: calc(1280 * var(--project-scale)); height: 100%; }
+    .is-horizontal .website-project__external { top: calc(40 * var(--project-scale)); right: calc(40 * var(--project-scale)); width: calc(80 * var(--project-scale)); height: calc(80 * var(--project-scale)); }
+}
+
+@media (min-width: 1025px) and (hover: hover) and (pointer: fine) {
+    .website-project__overlay { transition: opacity 250ms ease; }
+    .website-project__external { transition: background-color 250ms ease; }
+    .website-project__thumbnail:hover .website-project__external,
+    .website-project__thumbnail:focus-visible .website-project__external { background-color: transparent; }
+    .website-project__thumbnail:hover .website-project__overlay,
+    .website-project__thumbnail:focus-visible .website-project__overlay { opacity: 1; }
+}
+
+@media (max-width: 1024px) {
+    .website-projects__heading { width: min(268px, calc(100% - var(--page-gutter) * 2)); padding-bottom: 20px; }
+    .website-projects__heading h2 { font-size: 40px; }
+    .website-project__thumbnail { aspect-ratio: 3 / 4; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .website-project__overlay,
+    .website-project__external { transition: none; }
 }
 
 html,
@@ -107,7 +264,6 @@ main {
     color: #000000;
     /* 제목과 공통 좌우 여백을 확보할 수 있을 때만 최대 크기를 사용합니다. */
     font-size: var(--intro-title-size);
-    font-weight: 900;
     line-height: normal;
     letter-spacing: 0;
     white-space: nowrap;
@@ -205,7 +361,7 @@ main {
     overflow: hidden;
     padding-block: clamp(6px, 0.5208333vw, 10px);
     font-size: clamp(16px, 2.0833333vw, 40px);
-    font-weight: 900;
+    font-weight: 700;
     line-height: normal;
     white-space: nowrap;
     text-transform: uppercase;
@@ -439,7 +595,6 @@ main {
 .profile-about h2,
 .profile-skills h2 {
     font-size: clamp(48px, 4.1666667vw, 80px);
-    font-weight: 900;
     line-height: normal;
     letter-spacing: 0;
 }

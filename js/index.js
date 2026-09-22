@@ -1,3 +1,48 @@
+// PC에서만 섹션을 고정하고 세로 스크롤 거리를 가로 이동으로 변환합니다.
+(() => {
+    const section = document.querySelector('.website-projects');
+    const track = section?.querySelector('.website-projects__track');
+    if (!track || !window.gsap || !window.ScrollTrigger) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.matchMedia().add('(min-width: 1025px) and (prefers-reduced-motion: no-preference)', () => {
+        section.classList.add('is-horizontal');
+        const distance = () => Math.max(0, track.scrollWidth - section.clientWidth);
+        const tween = gsap.to(track, {
+            x: () => -distance(),
+            ease: 'none',
+            scrollTrigger: {
+                trigger: section,
+                start: 'top top',
+                end: () => `+=${distance()}`,
+                pin: true,
+                scrub: true,
+                invalidateOnRefresh: true,
+                anticipatePin: 1,
+            },
+        });
+
+        // 화면 밖 썸네일로 키보드 포커스가 이동하면 해당 프로젝트를 보여줍니다.
+        const viewport = section.querySelector('.website-projects__viewport');
+        function revealFocusedProject(event) {
+            const card = event.target.closest('.website-project');
+            if (!card) return;
+            viewport.scrollLeft = 0;
+            const gutter = parseFloat(getComputedStyle(track).paddingLeft);
+            const offset = Math.min(distance(), Math.max(0, card.offsetLeft - gutter));
+            window.scrollTo({ top: tween.scrollTrigger.start + offset, behavior: 'instant' });
+        }
+        track.addEventListener('focusin', revealFocusedProject);
+        return () => {
+            track.removeEventListener('focusin', revealFocusedProject);
+            section.classList.remove('is-horizontal');
+        };
+    });
+
+    document.fonts.ready.then(() => ScrollTrigger.refresh());
+    window.addEventListener('load', () => ScrollTrigger.refresh(), { once: true });
+})();
+
 // 배경의 sticky 경계 안에서만 본문을 표시합니다. 별도 스크롤 영역은 만들지 않습니다.
 (() => {
     const panel = document.querySelector('.profile-content__details');

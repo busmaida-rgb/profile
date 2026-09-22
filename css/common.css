@@ -50,3 +50,13 @@ button {
 address {
     font-style: inherit;
 }
+
+html {
+    font-family: 'Pretendard', sans-serif;
+    background: var(--beige);
+}
+
+.title-en {
+    font-family: "Merriweather", serif;
+    font-weight: 700;
+}
