@@ -1,3 +1,103 @@
+// 다음 팝업 상단이 화면 중앙을 통과하면 PC의 고정 설명만 교체합니다.
+document.querySelectorAll('.content-designs').forEach((section) => {
+    const images = [...section.querySelectorAll('.popup-project__image')];
+    const descriptions = [...section.querySelectorAll('.popup-project > .popup-project__description')];
+    const detail = section.querySelector('.content-designs__detail .popup-project__description');
+    const desktop = window.matchMedia('(min-width: 1025px)');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let active = -1;
+    let frame;
+    let animation;
+    let revision = 0;
+
+    function replaceDescription(index) {
+        detail.replaceChildren(...[...descriptions[index].childNodes].map(node => node.cloneNode(true)));
+    }
+
+    async function showDescription(index, immediate) {
+        const currentRevision = ++revision;
+        animation?.cancel();
+        active = index;
+        if (immediate || reducedMotion.matches || !detail.animate) {
+            replaceDescription(index);
+            return;
+        }
+        try {
+            animation = detail.animate([
+                { filter: 'blur(0px)', opacity: 1 },
+                { filter: 'blur(8px)', opacity: 0 },
+            ], { duration: 180, easing: 'ease-in', fill: 'forwards' });
+            await animation.finished;
+            if (currentRevision !== revision) return;
+            replaceDescription(index);
+            animation.cancel();
+            animation = detail.animate([
+                { filter: 'blur(8px)', opacity: 0 },
+                { filter: 'blur(0px)', opacity: 1 },
+            ], { duration: 260, easing: 'ease-out' });
+            await animation.finished;
+        } catch (error) {
+            // 빠른 역스크롤이나 화면 크기 변경으로 취소된 전환은 버립니다.
+            if (error.name !== 'AbortError') throw error;
+        }
+    }
+
+    function update() {
+        frame = undefined;
+        if (!desktop.matches) {
+            ++revision;
+            animation?.cancel();
+            active = -1;
+            return;
+        }
+        let next = 0;
+        images.forEach((image, index) => {
+            if (image.getBoundingClientRect().top <= window.innerHeight * 0.5) next = index;
+        });
+        if (next !== active) showDescription(next, active === -1);
+    }
+
+    function scheduleUpdate() {
+        if (frame === undefined) frame = requestAnimationFrame(update);
+    }
+
+    replaceDescription(0);
+    section.classList.add('is-enhanced');
+    window.addEventListener('scroll', scheduleUpdate, { passive: true });
+    window.addEventListener('resize', scheduleUpdate, { passive: true });
+    window.addEventListener('pageshow', scheduleUpdate);
+    window.addEventListener('load', scheduleUpdate, { once: true });
+    desktop.addEventListener('change', scheduleUpdate);
+    reducedMotion.addEventListener('change', () => {
+        active = -1;
+        scheduleUpdate();
+    });
+    document.fonts.ready.then(scheduleUpdate);
+    scheduleUpdate();
+});
+
+// PC와 모바일 모두 팝업 영역 하단이 화면 중앙 이상으로 올라오면 전환합니다.
+(() => {
+    const group = document.querySelector('.content-designs-group');
+    const popupSection = document.querySelector('#content-designs');
+    if (!group || !popupSection) return;
+    let frame;
+    function update() {
+        frame = undefined;
+        group.classList.toggle('is-poster', popupSection.getBoundingClientRect().bottom <= window.innerHeight * 0.5);
+    }
+    function scheduleUpdate() {
+        if (frame === undefined) frame = requestAnimationFrame(update);
+    }
+    window.addEventListener('scroll', scheduleUpdate, { passive: true });
+    window.addEventListener('resize', scheduleUpdate, { passive: true });
+    window.addEventListener('pageshow', scheduleUpdate);
+    window.addEventListener('load', scheduleUpdate, { once: true });
+    new ResizeObserver(scheduleUpdate).observe(group);
+    document.fonts.ready.then(scheduleUpdate);
+    scheduleUpdate();
+})();
+
 // clip-path의 영향을 받지 않는 레이아웃 좌표로 진입·이탈을 확인합니다.
 (() => {
     const heading = document.querySelector('.website-projects__heading');
@@ -148,6 +248,42 @@
         navigation.hidden = true;
         toggle.setAttribute('aria-expanded', 'false');
     }
+
+    let previousScroll = Math.max(0, window.scrollY);
+    let scrollFrame;
+
+    function setMenuHidden(hidden) {
+        if (hidden) closeMenu();
+        menu.classList.toggle('is-scroll-hidden', hidden);
+        menu.inert = hidden;
+    }
+
+    function updateMenuVisibility() {
+        scrollFrame = undefined;
+        const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+        const currentScroll = Math.min(maxScroll, Math.max(0, window.scrollY));
+        const difference = currentScroll - previousScroll;
+
+        if (currentScroll <= 0) {
+            setMenuHidden(false);
+        } else if (Math.abs(difference) < 4) {
+            return;
+        } else {
+            setMenuHidden(difference > 0);
+        }
+        previousScroll = currentScroll;
+    }
+
+    window.addEventListener('scroll', () => {
+        if (scrollFrame === undefined) {
+            scrollFrame = requestAnimationFrame(updateMenuVisibility);
+        }
+    }, { passive: true });
+
+    window.addEventListener('pageshow', () => {
+        previousScroll = Math.max(0, window.scrollY);
+        setMenuHidden(false);
+    });
 
     toggle.addEventListener('click', () => {
         const open = toggle.getAttribute('aria-expanded') !== 'true';

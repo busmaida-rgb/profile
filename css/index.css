@@ -1,3 +1,130 @@
+/* Content designs: 모바일은 이미지와 설명을 함께, PC는 3열로 표시합니다. */
+.content-designs-group {
+    position: relative;
+    z-index: 3;
+    order: 5;
+    width: 100%;
+    background: var(--beige);
+    isolation: isolate;
+}
+
+.content-designs {
+    position: relative;
+    z-index: 3;
+    order: 5;
+    width: 100%;
+    padding-top: 160px;
+    background: transparent;
+}
+
+.content-designs__background {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    clip-path: inset(0);
+    pointer-events: none;
+    user-select: none;
+}
+
+.content-designs__background span {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 15.625vw;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+    color: #000;
+    opacity: 0.3;
+    transition: opacity 600ms ease, filter 600ms ease;
+}
+
+.content-designs__background .content-designs__word--poster { opacity: 0; filter: blur(18px); }
+.is-poster .content-designs__word--popup { opacity: 0; filter: blur(18px); }
+.is-poster .content-designs__word--poster { opacity: 0.3; filter: blur(0); }
+
+@media (prefers-reduced-motion: reduce) {
+    .content-designs__background span { transition: none; }
+}
+
+.content-designs__heading {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 80px 20px;
+    margin-bottom: 40px;
+    background: var(--yellow);
+}
+
+.content-designs__heading h2 { font-size: 40px; line-height: 1.25; }
+.content-designs__heading > p { font-size: 20px; font-weight: 600; line-height: 1.2; }
+.popup-projects { display: flex; flex-direction: column; gap: 60px; padding-inline: var(--page-gutter); }
+.popup-project { min-width: 0; }
+.popup-project__image { display: block; width: 100%; height: auto; aspect-ratio: 2 / 3; box-shadow: 0 8px 8px rgb(0 0 0 / 25%); }
+.popup-project__description { display: flex; flex-direction: column; gap: 10px; padding: 0 10px; margin-top: 20px; }
+.popup-project__description h3 { font-size: 20px; font-weight: 700; line-height: 1.2; word-break: keep-all; }
+.popup-project__description p { font-size: 16px; line-height: 1.2; }
+.content-designs__detail { display: none; }
+.content-designs--poster .popup-project__image { aspect-ratio: auto; }
+
+@media (min-width: 1025px) {
+    .content-designs--poster .content-designs__heading { grid-column: 3; grid-row: 1; text-align: right; align-items: flex-end; }
+    .content-designs--poster .popup-projects { grid-column: 2; grid-row: 1; }
+    .content-designs--poster .content-designs__detail { grid-column: 1; grid-row: 1; }
+    .content-designs {
+        --popup-scale: min(1px, calc(100vw / 1920));
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        align-items: start;
+        gap: calc(40 * var(--popup-scale));
+        padding: calc(197 * var(--popup-scale)) var(--page-gutter) calc(40 * var(--popup-scale));
+    }
+
+    .content-designs__heading {
+        position: sticky;
+        top: calc(40 * var(--popup-scale));
+        height: calc(100vh - 80 * var(--popup-scale));
+        height: calc(100dvh - 80 * var(--popup-scale));
+        min-height: min-content;
+        gap: calc(40 * var(--popup-scale));
+        padding: calc(40 * var(--popup-scale));
+        margin: 0;
+    }
+
+    .content-designs__heading h2 { font-size: calc(80 * var(--popup-scale)); }
+    .content-designs__heading > p { font-size: calc(40 * var(--popup-scale)); }
+    .popup-projects { gap: calc(120 * var(--popup-scale)); padding: 0; }
+    .popup-project__image {
+        width: min(100%, calc(500 * var(--popup-scale)));
+        margin-inline: auto;
+    }
+
+    .content-designs__detail {
+        position: sticky;
+        top: max(24px, calc((100dvh - 750 * var(--popup-scale)) / 2));
+        height: calc(750 * var(--popup-scale));
+        padding: calc(40 * var(--popup-scale));
+        align-items: center;
+    }
+
+    .content-designs__detail .popup-project__description { margin: 0; padding: 0; gap: calc(40 * var(--popup-scale)); }
+    .content-designs__detail h3 { font-size: calc(40 * var(--popup-scale)); }
+    .content-designs__detail p { font-size: max(16px, calc(20 * var(--popup-scale))); }
+    .content-designs.is-enhanced .content-designs__detail { display: flex; }
+    /* 원본 설명은 스크린 리더와 모바일에서 이미지별로 읽을 수 있도록 유지합니다. */
+    .is-enhanced .popup-project > .popup-project__description {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+}
+
 /* Website projects: 기본 세로 배치, GSAP 초기화 후 PC 가로 배치 */
 .website-projects {
     position: relative;
@@ -12,7 +139,7 @@
     width: min(1280px, calc(100% - var(--page-gutter) * 2));
     margin: 0 auto 80px;
     padding-bottom: 40px;
-    border-bottom: 2px solid var(--main);
+    border-bottom: 2px solid var(--sage2);
     text-align: center;
 }
 
@@ -161,9 +288,25 @@
 }
 
 @media (max-width: 1024px) {
+    .website-projects { margin-top: 160px; }
+
     .website-projects__heading { width: min(268px, calc(100% - var(--page-gutter) * 2)); padding-bottom: 20px; }
     .website-projects__heading h2 { font-size: 40px; }
-    .website-project__thumbnail { aspect-ratio: 3 / 4; }
+
+    .website-project {
+        padding-bottom: 20px;
+        background: var(--sage2);
+    }
+
+    .website-project__thumbnail {
+        margin-inline: 20px;
+        aspect-ratio: 1 / 1;
+    }
+
+    .website-project__thumbnail picture {
+        position: absolute;
+        inset: 0;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -178,7 +321,7 @@ body {
 }
 
 main {
-    --profile-media-ratio: 0.391667;
+    --profile-media-ratio: calc(627 / 1920);
     position: relative;
 }
 
@@ -186,12 +329,21 @@ main {
     position: fixed;
     top: 40px;
     right: var(--page-gutter);
-    z-index: 20;
-    /* 마퀴의 페이드 인(2350ms + 450ms)이 끝난 뒤 메뉴를 표시합니다. */
-    animation: menu-fade-in 450ms 2800ms ease-in-out both;
+    z-index: 2147483647;
+    opacity: 1;
+    transform: translateY(0);
+    transition: transform 300ms ease, opacity 300ms ease;
+}
+
+.site-menu.is-scroll-hidden {
+    opacity: 0;
+    transform: translateY(calc(-100% - 40px));
+    pointer-events: none;
 }
 
 .site-menu__toggle {
+    /* 첫 등장 효과는 버튼에 적용해 메뉴의 스크롤 전환과 분리합니다. */
+    animation: menu-fade-in 450ms 2800ms ease-in-out backwards;
     padding: 5px 20px;
     border: 2px solid #000;
     border-radius: 20px;
@@ -413,7 +565,7 @@ main {
     }
 
     to {
-        opacity: 1;
+        opacity: 0.7;
         visibility: visible;
     }
 }
@@ -448,12 +600,16 @@ main {
         animation-play-state: paused;
     }
 
-    .site-menu,
+    .site-menu__toggle,
     .portfolio-intro__title,
     .portfolio-intro__image,
     .portfolio-intro__name,
     .marquee--intro {
         animation: none;
+    }
+
+    .site-menu {
+        transition: none;
     }
 
     .portfolio-intro__image {
@@ -579,7 +735,7 @@ main {
     margin-bottom: -100vh;
     margin-bottom: -100svh;
     translate: 0 var(--media-end-offset, 0px);
-    background: url('../images/placeholder-profile2.jpg') center / cover no-repeat;
+    background: url('../images/profile2.png') center / cover no-repeat;
 }
 
 .profile-content__details {
@@ -722,6 +878,7 @@ main {
 
 @media (max-width: 1024px) {
     main {
+        --mobile-profile-height: min(calc((100vw - var(--page-gutter) * 2) * 2044 / 1460), calc(100svh - 48px));
         display: flex;
         flex-direction: column;
     }
@@ -744,14 +901,17 @@ main {
     }
 
     .profile-content__media {
-        order: 2;
+        order: 0;
         top: 24px;
         flex-shrink: 0;
         width: calc(100% - var(--page-gutter) * 2);
-        height: auto;
-        max-height: 720px;
-        aspect-ratio: 354 / 572;
-        margin: 24px var(--page-gutter) 0;
+        height: var(--mobile-profile-height);
+        max-height: calc(100vh - 48px);
+        max-height: calc(100svh - 48px);
+        aspect-ratio: 1460 / 2044;
+        background-size: contain;
+        /* 인트로와 같은 위치에서 시작해 배경 뒤에 고정합니다. */
+        margin: 24px var(--page-gutter) calc(-1 * (var(--mobile-profile-height) + 24px));
         clip-path: inset(var(--media-clip-top, 0px) 0 var(--media-clip-bottom, 0px) 0);
     }
 
@@ -760,7 +920,10 @@ main {
         --panel-inset: 24px;
         --panel-padding: 24px;
         display: block;
+        /* 인트로가 지나간 뒤 사진을 볼 수 있는 스크롤 공간입니다. */
+        margin-top: calc(var(--mobile-profile-height) + 48px);
         padding-inline: var(--page-gutter);
+        padding-bottom: 0;
     }
 
     /* ABOUT보다 24px 먼저 올라오는 배경으로 스티키 사진의 하단을 가립니다. */
