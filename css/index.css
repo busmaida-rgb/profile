@@ -7,6 +7,8 @@
 .banner-designs__description { display: flex; flex-direction: column; gap: 40px; padding: min(2.083333vw, 40px); overflow-wrap: anywhere; }
 .banner-designs__description h3 { font-size: clamp(24px, 2.083333vw, 40px); font-weight: 700; line-height: 1.2; }
 .banner-designs__description p { font-size: clamp(16px, 1.041667vw, 20px); line-height: 1.2; }
+.banner-designs__paragraphs { display: flex; flex-direction: column; gap: 20px; }
+.banner-designs__paragraphs p { margin: 0; }
 .banner-designs__gallery { min-width: 0; }
 .banner-designs__swiper .swiper-slide { width: 79.80846%; }
 .banner-designs__swiper .swiper-slide > img { display: block; width: 100%; height: auto; aspect-ratio: 1000 / 505; object-fit: contain; user-select: none; }
@@ -113,6 +115,8 @@
 .popup-project__description { display: flex; flex-direction: column; gap: 10px; padding: 0 10px; margin-top: 20px; }
 .popup-project__description h3 { font-size: 20px; font-weight: 700; line-height: 1.2; word-break: keep-all; }
 .popup-project__description p { font-size: 16px; line-height: 1.2; }
+.popup-project__paragraphs { display: flex; flex-direction: column; gap: 20px; }
+.popup-project__paragraphs p { margin: 0; }
 .content-designs__detail { display: none; }
 .content-designs--poster .popup-project__image { aspect-ratio: auto; }
 
