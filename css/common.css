@@ -53,7 +53,7 @@ address {
 
 html {
     font-family: 'Pretendard', sans-serif;
-    background: var(--beige);
+    background: var(--page-background, var(--beige));
 }
 
 .title-en {

@@ -1,5 +1,5 @@
 /* Banner designs */
-.banner-designs { position: relative; z-index: 3; order: 6; width: 100%; background: var(--beige); }
+.banner-designs { position: relative; z-index: 3; order: 6; width: 100%; background: var(--page-background); }
 .banner-designs__panel { display: flex; flex-direction: column; justify-content: center; gap: min(7.4074svh, 80px); height: 100vh; height: 100svh; padding-block: min(5svh, 54px); background: var(--blue); overflow: hidden; }
 .banner-designs__heading { width: min(66.666667%, 1280px); margin-inline: auto; padding-bottom: 40px; border-bottom: 2px solid var(--blue2); text-align: center; }
 .banner-designs__heading h2 { font-size: clamp(40px, 4.166667vw, 80px); line-height: 1.25; }
@@ -54,7 +54,7 @@
     z-index: 3;
     order: 5;
     width: 100%;
-    background: var(--beige);
+    background: var(--page-background);
     isolation: isolate;
 }
 
@@ -366,6 +366,37 @@
     .website-project__external { transition: none; }
 }
 
+.site-footer {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+    height: 100vh;
+    height: 100dvh;
+    padding-inline: 40px;
+    color: #fff;
+}
+
+.site-footer__message { width: 100%; }
+.site-footer__title { font-size: clamp(40px, 4.166667vw, 80px); line-height: 1.2625; overflow-wrap: anywhere; }
+.site-footer__title span { display: block; }
+.site-footer__description { margin-top: 10px; font-size: 20px; line-height: 1.2; }
+.site-footer__divider { flex: none; width: 100%; height: 1px; background: url('../images/footer-divider-pc.svg') center / 100% 1px no-repeat; }
+.site-footer__email { font-size: 40px; line-height: 1.2; overflow-wrap: anywhere; max-width: 100%; }
+.site-footer__email:hover { text-decoration: underline; text-underline-offset: .15em; }
+.site-footer__email:focus-visible { outline: 2px solid currentColor; outline-offset: 6px; }
+
+@media (max-width: 1024px) {
+    .site-footer { gap: 20px; padding-inline: 20px; }
+    .site-footer__title { font-size: 40px; line-height: 1.25; }
+    .site-footer__description { font-size: 12px; }
+    .site-footer__divider { background-image: url('../images/footer-divider-mobile.svg'); }
+    .site-footer__email { font-size: 20px; }
+}
+
 html,
 body {
     width: 100%;
@@ -413,7 +444,7 @@ main {
     padding: 8px;
     border: 1px solid #000;
     border-radius: 8px;
-    background: var(--beige);
+    background: var(--page-background);
 }
 
 .site-menu__links a {
@@ -457,7 +488,7 @@ main {
     height: 100dvh;
     /* 스크롤 컨테이너를 만들지 않고 잘라내어 내부 sticky가 작동하게 합니다. */
     overflow: clip;
-    background: var(--beige);
+    background: var(--page-background);
     isolation: isolate;
 }
 
@@ -984,7 +1015,7 @@ main {
         position: absolute;
         inset: calc(-1 * var(--panel-inset)) 0 0;
         z-index: -1;
-        background: var(--beige);
+        background: var(--page-background);
         pointer-events: none;
     }
 
@@ -1042,13 +1073,18 @@ main {
     position: relative;
     z-index: 3;
     isolation: isolate;
-    background: var(--beige);
+    background: var(--page-background);
     padding: 160px 40px 80px;
 }
 .product-detail-pages__heading {
     max-width: 1280px;
     margin: 0 auto 80px;
     text-align: center;
+}
+.product-detail-pages > .content-designs__background {
+    /* DETAIL이 푸터 진입 중 사라질 때 섹션 하단에서 먼저 잘리지 않게 합니다. */
+    clip-path: inset(0 0 -100vh);
+    clip-path: inset(0 0 -100dvh);
 }
 .product-detail-pages__heading h2 {
     font-size: clamp(40px, 4.166667vw, 80px);

@@ -171,6 +171,55 @@ document.querySelectorAll('.content-designs').forEach((section) => {
     window.addEventListener('load', () => ScrollTrigger.refresh(), { once: true });
 })();
 
+// 실제 푸터 위치로 계산해 PC pin 구간과 레이아웃 변경에도 진행률을 맞춥니다.
+(() => {
+    const footer = document.querySelector('.site-footer');
+    if (!footer || !window.gsap) return;
+
+    const root = document.documentElement;
+    const detailBackground = document.querySelector('.product-detail-pages .content-designs__background');
+    const color = (token) => getComputedStyle(root).getPropertyValue(token).trim();
+    const transition = gsap.timeline({ paused: true });
+    transition.fromTo(root, {
+        '--page-background': color('--beige'),
+    }, {
+        '--page-background': color('--gray'),
+        duration: 1,
+        ease: 'none',
+    }, 0);
+    if (detailBackground) {
+        transition.fromTo(detailBackground, { opacity: 1 }, {
+            opacity: 0,
+            // 푸터가 화면 높이의 20%만큼 들어오면 글자를 완전히 숨깁니다.
+            duration: 0.2,
+            ease: 'none',
+        }, 0);
+    }
+
+    let frame;
+    function update() {
+        frame = undefined;
+        const height = window.innerHeight;
+        const progress = Math.min(1, Math.max(0, (height - footer.getBoundingClientRect().top) / height));
+        transition.progress(progress);
+    }
+    function scheduleUpdate() {
+        if (frame === undefined) frame = requestAnimationFrame(update);
+    }
+
+    window.addEventListener('scroll', scheduleUpdate, { passive: true });
+    window.addEventListener('resize', scheduleUpdate, { passive: true });
+    window.addEventListener('pageshow', scheduleUpdate);
+    window.addEventListener('load', scheduleUpdate, { once: true });
+    window.visualViewport?.addEventListener('resize', scheduleUpdate);
+    window.ScrollTrigger?.addEventListener('refresh', scheduleUpdate);
+    const resizeObserver = new ResizeObserver(scheduleUpdate);
+    resizeObserver.observe(document.body);
+    resizeObserver.observe(footer);
+    document.fonts.ready.then(scheduleUpdate);
+    update();
+})();
+
 // 배경의 sticky 경계 안에서만 본문을 표시합니다. 별도 스크롤 영역은 만들지 않습니다.
 (() => {
     const panel = document.querySelector('.profile-content__details');

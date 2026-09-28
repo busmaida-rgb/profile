@@ -1,6 +1,7 @@
 :root{
     --page-gutter: 40px;
     --beige: #F9F8F6;
+    --page-background: var(--beige);
     --main: #B6AE9F;
     --main2: #E5E0D8;
     --sage: #DDE0D1;
@@ -8,6 +9,7 @@
     --yellow: #F0EDD6;
     --blue2: #6094B2;
     --blue: #CDDAE6;
+    --gray: #57595B;
 }
 
 @media (max-width: 1024px) {
