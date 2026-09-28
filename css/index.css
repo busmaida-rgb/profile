@@ -1,3 +1,49 @@
+/* Banner designs */
+.banner-designs { position: relative; z-index: 3; order: 6; width: 100%; margin-top: 160px; background: var(--beige); }
+.banner-designs__panel { display: flex; flex-direction: column; justify-content: center; gap: min(7.4074svh, 80px); height: 100vh; height: 100svh; padding-block: min(5svh, 54px); background: var(--blue); overflow: hidden; }
+.banner-designs__heading { width: min(66.666667%, 1280px); margin-inline: auto; padding-bottom: 40px; border-bottom: 2px solid var(--blue2); text-align: center; }
+.banner-designs__heading h2 { font-size: clamp(40px, 4.166667vw, 80px); line-height: 1.25; }
+.banner-designs__body { display: grid; grid-template-columns: minmax(0, 587fr) minmax(0, 1253fr); gap: 40px; padding-left: var(--page-gutter); align-items: center; }
+.banner-designs__description { display: flex; flex-direction: column; gap: 40px; padding: min(2.083333vw, 40px); overflow-wrap: anywhere; }
+.banner-designs__description h3 { font-size: clamp(24px, 2.083333vw, 40px); font-weight: 700; line-height: 1.2; }
+.banner-designs__description p { font-size: clamp(16px, 1.041667vw, 20px); line-height: 1.2; }
+.banner-designs__gallery { min-width: 0; }
+.banner-designs__swiper .swiper-slide { width: 79.80846%; }
+.banner-designs__swiper .swiper-slide > img { display: block; width: 100%; height: auto; aspect-ratio: 1000 / 505; object-fit: contain; user-select: none; }
+.banner-designs__controls { display: flex; align-items: center; gap: 40px; width: 79.80846%; margin-top: 20px; }
+.banner-designs__count { display: flex; align-items: center; gap: 10px; font-size: 20px; font-variant-numeric: tabular-nums; }
+.banner-designs__separator { width: 20px; border-top: 2px solid currentColor; }
+.banner-designs__line { flex: 1; border-top: 2px solid #000000; }
+.banner-designs__arrows { display: flex; gap: 4px; }
+.banner-designs__arrows button { display: grid; place-items: center; width: 44px; height: 44px; cursor: pointer; }
+.banner-designs__arrows img { filter: brightness(0); transform: scale(.6); }
+.banner-designs__prev img { transform: rotate(180deg) scale(.6); }
+.banner-designs__arrows button:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+@media (min-width: 1025px) {
+    .banner-designs__swiper .swiper-slide > img { max-height: calc(77.5926svh - 186px); }
+}
+@media (max-width: 1024px) {
+    .banner-designs { margin-top: 0; padding-top: 160px; }
+    .banner-designs__panel { height: auto; gap: 80px; padding-block: 80px; }
+    .banner-designs__heading { width: min(268px, calc(100% - 40px)); padding-bottom: 20px; }
+    .banner-designs__heading h2 { font-size: 40px; line-height: 1.25; }
+    .banner-designs__body { width: 100%; grid-template-columns: minmax(0, 1fr); gap: 20px; padding-inline: 20px; }
+    .banner-designs__gallery { grid-row: 1; }
+    .banner-designs__description { grid-row: 2; gap: 10px; padding: 0; }
+    .banner-designs__description h3 { font-size: 20px; }
+    .banner-designs__description p { font-size: 16px; }
+    .banner-designs__swiper .swiper-slide, .banner-designs__controls { width: 100%; }
+    .banner-designs__controls { gap: 10px; margin-top: 10px; }
+    .banner-designs__count { gap: 5px; font-size: 12px; line-height: 14px; }
+    .banner-designs__separator { width: 10px; border-top-width: 1px; }
+    .banner-designs__line { border-top: 1px solid #000000; }
+    .banner-designs__arrows { gap: 10px; }
+    .banner-designs__arrows button { position: relative; width: 14px; height: 14px; }
+    .banner-designs__arrows button::before { content: ''; position: absolute; inset: -10px -5px; }
+    .banner-designs__arrows img { position: absolute; max-width: none; max-height: none; transform: scale(.35); }
+    .banner-designs__prev img { transform: rotate(180deg) scale(.35); }
+}
+
 /* Content designs: 모바일은 이미지와 설명을 함께, PC는 3열로 표시합니다. */
 .content-designs-group {
     position: relative;

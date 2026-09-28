@@ -409,6 +409,7 @@ document.querySelectorAll('.marquee').forEach((marquee) => {
     }
 
     window.addEventListener('wheel', (event) => {
+        if (document.querySelector('.image-modal[open]')) return;
         if (reducedMotion.matches || !finePointer.matches || event.ctrlKey || event.shiftKey) return;
 
         event.preventDefault();

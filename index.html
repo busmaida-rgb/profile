@@ -19,12 +19,17 @@
     rel="stylesheet">
   <link rel="stylesheet" href="./css/font.css">
   <link rel="stylesheet" href="./css/root.css">
+  <link rel="stylesheet" href="./css/swiper-bundle.min.css">
   <link rel="stylesheet" href="./css/index.css">
+  <link rel="stylesheet" href="./css/image-modal.css">
 
   <script src="./js/jquery-4.0.0.min.js"></script>
   <script src="./js/gsap.min.js" defer></script>
   <script src="./js/ScrollTrigger.min.js" defer></script>
+  <script src="./js/swiper-bundle.min.js" defer></script>
+  <script src="./js/banner.js" defer></script>
   <script src="./js/index.js" defer></script>
+  <script src="./js/image-modal.js" defer></script>
 
   <title>최윤성 | UI/UX Designer · Web Publisher Portfolio</title>
 </head>
@@ -204,8 +209,7 @@
       <div class="content-designs__background" aria-hidden="true"><span class="content-designs__word--popup">POP-UP</span><span class="content-designs__word--poster">POSTER</span></div>
     <section id="content-designs" class="content-designs" aria-labelledby="content-designs-title">
       <header class="content-designs__heading">
-        <h2 id="content-designs-title" class="title-en">CONTENT<br>DESIGNS</h2>
-        <p>POP-UP</p>
+        <h2 id="content-designs-title" class="title-en">POPUP<br>DESIGNS</h2>
       </header>
       <div class="popup-projects">
         <article class="popup-project">
@@ -243,8 +247,7 @@
     </section>
     <section id="poster-designs" class="content-designs content-designs--poster" aria-labelledby="poster-designs-title">
       <header class="content-designs__heading">
-        <h2 id="poster-designs-title" class="title-en">CONTENT<br>DESIGNS</h2>
-        <p>POSTER</p>
+        <h2 id="poster-designs-title" class="title-en">POSTER<br>DESIGNS</h2>
       </header>
       <div class="popup-projects">
         <article class="popup-project">
@@ -267,6 +270,34 @@
       <div class="content-designs__detail" aria-hidden="true"><div class="popup-project__description"></div></div>
     </section>
     </div>
+    <section id="banner-designs" class="banner-designs" aria-labelledby="banner-designs-title">
+      <div class="banner-designs__panel">
+        <header class="banner-designs__heading">
+          <h2 id="banner-designs-title" class="title-en">BANNER DESIGNS</h2>
+        </header>
+        <div class="banner-designs__body">
+          <div class="banner-designs__description"><h3>배너1</h3><p>설명<br>설명<br>설명<br>설명</p></div>
+          <div class="banner-designs__gallery">
+            <div class="banner-designs__swiper swiper" aria-label="배너 디자인 작품">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide"><img src="./images/banner1.png" alt="배너 디자인 1" draggable="false"><template><h3>배너1</h3><p>설명<br>설명<br>설명<br>설명</p></template></div>
+                <div class="swiper-slide"><img src="./images/banner2.png" alt="배너 디자인 2" draggable="false"><template><h3>배너2</h3><p>설명<br>설명<br>설명<br>설명</p></template></div>
+                <div class="swiper-slide"><img src="./images/banner3.png" alt="배너 디자인 3" draggable="false"><template><h3>배너3</h3><p>설명<br>설명<br>설명<br>설명</p></template></div>
+                <div class="swiper-slide"><img src="./images/banner4.png" alt="배너 디자인 4" draggable="false"><template><h3>배너4</h3><p>설명<br>설명<br>설명<br>설명</p></template></div>
+              </div>
+            </div>
+            <div class="banner-designs__controls">
+              <p class="banner-designs__count" aria-label="현재 배너 순서"><span class="banner-designs__current">01</span><span class="banner-designs__separator" aria-hidden="true"></span><span class="banner-designs__total">04</span></p>
+              <span class="banner-designs__line" aria-hidden="true"></span>
+              <div class="banner-designs__arrows">
+                <button class="banner-designs__prev" type="button" aria-label="이전 배너"><img src="./images/arrow-right.svg" width="40" height="40" alt=""></button>
+                <button class="banner-designs__next" type="button" aria-label="다음 배너"><img src="./images/arrow-right.svg" width="40" height="40" alt=""></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 </body>
 
