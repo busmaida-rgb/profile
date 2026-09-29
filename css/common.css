@@ -51,9 +51,22 @@ address {
     font-style: inherit;
 }
 
+button,
+input,
+select,
+textarea {
+    line-height: inherit;
+}
+
 html {
+    --paragraph-spacing: clamp(10px, 1.0416667vw, 20px);
     font-family: 'Pretendard', sans-serif;
+    line-height: 1.5;
     background: var(--page-background, var(--beige));
+}
+
+p {
+    margin-bottom: var(--paragraph-spacing);
 }
 
 .title-en {
