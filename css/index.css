@@ -1,6 +1,11 @@
 /* Banner designs */
 .banner-designs { position: relative; z-index: 3; order: 6; width: 100%; background: var(--page-background); }
-.banner-designs__panel { display: flex; flex-direction: column; justify-content: center; gap: 80px; height: auto; padding-block: 80px; background: var(--blue); overflow: hidden; }
+.banner-designs__panel { position: relative; isolation: isolate; display: flex; flex-direction: column; justify-content: center; gap: 80px; height: auto; padding-block: 80px; background: var(--blue); overflow: hidden; }
+.banner-designs__botanical { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; user-select: none; }
+.banner-designs__branch { position: absolute; left: -5%; bottom: 0; width: 115%; height: 120%; max-width: none; max-height: none; object-fit: fill; opacity: .14; transform-origin: 0% 100%; }
+@media (max-width: 1024px) {
+    .banner-designs__branch { left: -32%; width: 165%; opacity: .11; }
+}
 .banner-designs__heading { width: min(66.666667%, 1280px); margin-inline: auto; padding-bottom: 40px; border-bottom: 2px solid var(--blue2); text-align: center; }
 .banner-designs__heading h2 { font-size: clamp(40px, 4.166667vw, 80px); line-height: 1.25; }
 .banner-designs__body { display: grid; grid-template-columns: minmax(0, 587fr) minmax(0, 1253fr); gap: 40px; padding-left: var(--page-gutter); align-items: center; }
@@ -62,6 +67,32 @@
     width: 100%;
     padding-top: 160px;
     background: transparent;
+}
+
+/* Clip viewport corner ornaments to each section without changing sticky layout. */
+.content-designs__vines {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    clip-path: inset(0);
+    pointer-events: none;
+    user-select: none;
+}
+.content-designs__vine {
+    position: fixed;
+    width: min(18vw, 280px);
+    height: min(22.5vh, 230px);
+    height: min(22.5dvh, 230px);
+    /* Direct PNG backgrounds also load when index.html is opened via file://. */
+    background: url('../images/vine-corner.png') top left / 100% 100% no-repeat;
+    opacity: .16;
+}
+.content-designs__vine--tl { top: 0; left: 0; }
+.content-designs__vine--tr { top: 0; right: 0; transform: scaleX(-1); }
+.content-designs__vine--bl { bottom: 0; left: 0; transform: scaleY(-1); }
+.content-designs__vine--br { bottom: 0; right: 0; transform: scale(-1); }
+@media (max-width: 1024px) {
+    .content-designs__vine { width: 21vw; height: min(15dvh, 130px); opacity: .12; }
 }
 
 .content-designs__background {
@@ -190,6 +221,36 @@
     padding-bottom: 40px;
     border-bottom: 2px solid var(--sage2);
     text-align: center;
+}
+
+/* Scroll-driven petals stay behind the content and never intercept links. */
+.website-projects__petals {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    user-select: none;
+}
+.website-projects__petal {
+    position: absolute;
+    display: block;
+    width: var(--petal-size);
+    aspect-ratio: 64 / 180;
+    background: url('../images/calendula-petal.svg') center / contain no-repeat;
+    opacity: var(--petal-opacity);
+}
+.website-projects > .website-projects__heading,
+.website-projects > .website-projects__viewport {
+    position: relative;
+    z-index: 1;
+}
+@media (max-width: 1024px) {
+    .website-projects__petal { width: calc(var(--petal-size) * .65); }
+    .website-projects__petal:nth-child(n + 9) { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .website-projects__petals { display: none; }
 }
 
 .website-projects__heading h2 {
@@ -744,12 +805,12 @@ main {
         animation-name: portfolio-title-enter-mobile;
     }
 
-    .portfolio-intro__image {
-        width: var(--image-width);
-        animation-name: marquee-fade-in;
+    .portfolio-intro__name {
+        grid-row: 3;
     }
 
     .marquee--intro {
+        grid-row: 4;
         position: static;
     }
 }

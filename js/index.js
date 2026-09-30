@@ -143,6 +143,62 @@ document.querySelectorAll('.content-designs').forEach((section) => {
     window.addEventListener('load', () => ScrollTrigger.refresh(), { once: true });
 })();
 
+// Flower silhouettes follow scroll progress, including the desktop pinned track.
+(() => {
+    const section = document.querySelector('.website-projects');
+    if (!section || !window.gsap || !window.ScrollTrigger) return;
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
+        const layer = document.createElement('div');
+        layer.className = 'website-projects__petals';
+        layer.setAttribute('aria-hidden', 'true');
+        const layout = [
+            [6, 12, 24, -32], [22, 46, 36, 24], [42, 8, 22, 68],
+            [63, 34, 30, -48], [82, 10, 40, 38], [94, 61, 26, -20],
+            [12, 78, 32, 52], [54, 73, 26, -65], [33, 91, 20, 15],
+            [73, 85, 38, 76], [37, 32, 28, -12], [87, 43, 22, 42],
+        ];
+        const petals = layout.map(([left, top, size, rotation], index) => {
+            const petal = document.createElement('span');
+            petal.className = 'website-projects__petal';
+            petal.style.cssText = `left:${left}%;top:${top}%;--petal-size:${size * 1.15}px;--petal-opacity:${.13 + (index % 3) * .045}`;
+            layer.append(petal);
+            gsap.set(petal, { rotation });
+            return petal;
+        });
+        section.prepend(layer);
+        const timeline = gsap.timeline({
+            scrollTrigger: {
+                trigger: section,
+                start: 'top bottom',
+                end: () => {
+                    const track = section.querySelector('.website-projects__track');
+                    const pinnedDistance = section.classList.contains('is-horizontal')
+                        ? Math.max(0, track.scrollWidth - section.clientWidth) : 0;
+                    return `+=${window.innerHeight + section.offsetHeight + pinnedDistance}`;
+                },
+                scrub: 1.8,
+                invalidateOnRefresh: true,
+            },
+        });
+        petals.forEach((petal, index) => {
+            const direction = index % 2 ? 1 : -1;
+            timeline.fromTo(petal, {
+                x: -direction * 35,
+                y: -65,
+                rotation: layout[index][3],
+            }, {
+                x: direction * (65 + index * 5),
+                y: () => Math.min(section.offsetHeight * .22, 190) + index * 4,
+                rotation: layout[index][3] + direction * (65 + index * 7),
+                duration: 1,
+                ease: 'sine.inOut',
+            }, 0);
+        });
+        return () => layer.remove();
+    });
+})();
+
 // 실제 푸터 위치로 계산해 PC pin 구간과 레이아웃 변경에도 진행률을 맞춥니다.
 (() => {
     const footer = document.querySelector('.site-footer');
@@ -452,46 +508,25 @@ document.querySelectorAll('.marquee').forEach((marquee) => {
     reducedMotion.addEventListener('change', stopSmoothScroll);
 })();
 
-// PC와 모바일 모두 인트로 사진이 스크롤 거리의 30%만큼 계속 따라옵니다.
-(() => {
-    const intro = document.querySelector('.portfolio-intro');
-    const photo = intro?.querySelector('.portfolio-intro__image');
-    if (!intro || !photo) return;
-
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const followRatio = 0.3;
-    let frame;
-
-    function updatePhoto() {
-        frame = undefined;
-        const scrolled = Math.max(0, -intro.getBoundingClientRect().top);
-        const offset = reducedMotion.matches ? 0 : scrolled * followRatio;
-        photo.style.setProperty('--intro-photo-scroll', `${offset}px`);
-    }
-
-    function scheduleUpdate() {
-        if (frame !== undefined) return;
-        frame = window.requestAnimationFrame(updatePhoto);
-    }
-
-    window.addEventListener('scroll', scheduleUpdate, { passive: true });
-    window.addEventListener('resize', scheduleUpdate, { passive: true });
-    window.addEventListener('pageshow', scheduleUpdate);
-    reducedMotion.addEventListener('change', scheduleUpdate);
-
-    new ResizeObserver(scheduleUpdate).observe(intro);
-    document.fonts.ready.then(scheduleUpdate);
-    scheduleUpdate();
-})();
-
 // Each mobile project has its own device gallery; desktop keeps its scroll-driven track.
 (() => {
     if (typeof Swiper === 'undefined') return;
     const mobile = window.matchMedia('(max-width: 1024px)');
     const galleries = [...document.querySelectorAll('.website-project__gallery')];
+    // Swiper's cleanStyles removes slide styles, including our device dimensions.
+    const deviceStyles = galleries.flatMap(gallery =>
+        [...gallery.querySelectorAll('.website-project__device')].map(device => ({
+            device,
+            style: device.getAttribute('style'),
+        }))
+    );
     let sliders = [];
     function updateGalleries() {
         sliders.forEach(slider => slider.destroy(true, true));
+        deviceStyles.forEach(({ device, style }) => {
+            if (style === null) device.removeAttribute('style');
+            else device.setAttribute('style', style);
+        });
         sliders = mobile.matches ? galleries.map(gallery => new Swiper(gallery, {
             slidesPerView: 'auto', spaceBetween: 40,
             slidesOffsetBefore: 24, slidesOffsetAfter: 24,

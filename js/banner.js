@@ -1,3 +1,51 @@
+// Read the live panel position so earlier pins and layout changes cannot stale the range.
+(() => {
+    const panel = document.querySelector('.banner-designs__panel');
+    const branch = panel?.querySelector('.banner-designs__branch');
+    if (!branch || !window.gsap) return;
+
+    gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
+        const sway = gsap.timeline({
+            paused: true,
+            defaults: { duration: 1, ease: 'sine.inOut' },
+        })
+            .fromTo(branch, { rotation: 0 }, { rotation: -2 })
+            .to(branch, { rotation: 2 })
+            .to(branch, { rotation: 0 });
+
+        let frame;
+        let previousProgress = -1;
+        function update() {
+            frame = undefined;
+            const rect = panel.getBoundingClientRect();
+            const progress = gsap.utils.clamp(0, 1,
+                (window.innerHeight - rect.top) / (window.innerHeight + rect.height));
+            if (Math.abs(progress - previousProgress) < .0001) return;
+            previousProgress = progress;
+            gsap.to(sway, { progress, duration: .35, ease: 'power1.out', overwrite: true });
+        }
+        function scheduleUpdate() {
+            if (frame === undefined) frame = requestAnimationFrame(update);
+        }
+        window.addEventListener('scroll', scheduleUpdate, { passive: true });
+        window.addEventListener('resize', scheduleUpdate, { passive: true });
+        window.addEventListener('load', scheduleUpdate);
+        const observer = new ResizeObserver(scheduleUpdate);
+        observer.observe(document.body);
+        observer.observe(panel);
+        scheduleUpdate();
+
+        return () => {
+            cancelAnimationFrame(frame);
+            observer.disconnect();
+            window.removeEventListener('scroll', scheduleUpdate);
+            window.removeEventListener('resize', scheduleUpdate);
+            window.removeEventListener('load', scheduleUpdate);
+            gsap.killTweensOf(sway);
+        };
+    });
+})();
+
 (() => {
     const section = document.querySelector('.banner-designs');
     if (!section || typeof Swiper === 'undefined') return;
