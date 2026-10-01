@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KIEHL’S Website Redesign | 최윤성</title>
+    <meta name="description" content="키엘 웹사이트 리디자인 프로젝트의 디자인과 반응형 웹 구현 과정을 소개합니다.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/root.css">
+    <link rel="stylesheet" href="./css/font.css">
+    <link rel="stylesheet" href="./css/common.css">
+    <link rel="stylesheet" href="./css/website.css">
+    <script src="./js/website.js" defer></script>
+</head>
+<body>
+    <main class="website-case">
+        <header class="case-intro">
+            <p class="case-number title-en">01</p>
+            <h1 class="title-en">KIEHL’S WEBSITE REDESIGN</h1>
+        </header>
+            <nav class="case-links" aria-label="프로젝트 사이트 보기">
+                <a href="https://www.kiehls.co.kr/kr/home" target="_blank" rel="noopener noreferrer" aria-label="Original Website (새 창)">Original Website</a>
+                <a href="https://busmaida-rgb.github.io/divVision/index.html" target="_blank" rel="noopener noreferrer" aria-label="Our Design (새 창)">Our Design</a>
+            </nav>
+
+        <div class="case-devices" aria-label="키엘 반응형 웹사이트 목업">
+            <img class="case-devices__desktop" src="./images/kiehl-mockup-pc.png" width="1006" height="600" alt="키엘 리디자인 노트북 화면" fetchpriority="high">
+            <img class="case-devices__tablet" src="./images/kiehl-mockup-tab.png" width="377" height="500" alt="키엘 리디자인 태블릿 화면">
+            <img class="case-devices__phone" src="./images/kiehl-mockup-mo.png" width="193" height="400" alt="키엘 리디자인 모바일 화면">
+        </div>
+
+        <dl class="case-facts">
+            <dt>제작 기간</dt><dd>4주</dd>
+            <dt>참여 인원</dt><dd>3명</dd>
+            <dt>디자인 기여</dt><dd>헤더, 메인 페이지 - 신제품</dd>
+            <dt>웹 구현 기여</dt><dd>헤더, 푸터, 메인 페이지 전체, 베스트 셀러 페이지</dd>
+            <dt>사용 툴</dt><dd>Figma, Git, Visual Studio Code, Codex</dd>
+            <dt>사용 언어</dt><dd>HTML, CSS, JavaScript</dd>
+        </dl>
+
+        <section class="case-role" aria-labelledby="role-title">
+            <h2 id="role-title">MY ROLE</h2>
+            <div class="case-copy">
+                <p>주로 웹사이트 구현 작업을 맡았고, 헤더와 메인 페이지 중 한 섹션의 디자인에도 참여했습니다.</p>
+                <p>또한 팀 리더로서 역할을 분담하고 다른 팀원이 작업한 코드가 잘 작동하는지, 반응형이 제대로 적용되었는지를 확인하고 수정하거나 Git과 Github를 활용해 각 파일을 연결시키는 작업을 수행했습니다.</p>
+            </div>
+        </section>
+
+        <section class="case-header" aria-labelledby="header-title">
+            <h2 id="header-title" class="title-en">HEADER</h2>
+            <div class="case-feature case-feature--desktop">
+                <div class="case-copy">
+                    <p>헤더는 기본 상태에서 배경을 투명하게 설정했습니다. 히어로 배너의 이미지가 헤더 영역까지 이어지도록 해, 화면을 넓고 몰입감 있게 보여주고자 했습니다.</p>
+                    <p>헤더 뒤의 이미지에 따라 메뉴의 가독성이 낮아질 수 있기 때문에 마우스를 호버하거나 스크롤을 내리면 사이트의 메인 컬러가 배경색으로 나타나도록 구현했습니다.</p>
+                </div>
+                <img class="case-feature__laptop" src="./images/website-header-laptop.png" width="800" height="394" alt="키엘 데스크톱 헤더와 히어로 배너 목업" loading="lazy">
+            </div>
+            <div class="case-feature case-feature--mobile">
+                <div class="case-feature__phone-wrap">
+                    <img src="./images/kiehl-mockup-mo.png" width="193" height="400" alt="키엘 모바일 헤더가 적용된 화면" loading="lazy">
+                </div>
+                <div class="case-copy">
+                    <p>모바일에서는 화면 폭이 제한되어 있기 때문에 가독성을 고려해 아코디언 메뉴 형태로 반응형 구현을 했습니다.</p>
+                    <p>메뉴 버튼을 누르면 오버레이가 나오고, 아코디언 메가 메뉴는 화면보다 길어질 수 있기 때문에 오버레이 안에서 스크롤이 되도록 만들었습니다.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

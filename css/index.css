@@ -69,7 +69,7 @@
     background: transparent;
 }
 
-/* Clip viewport corner ornaments to each section without changing sticky layout. */
+/* Share corner ornaments across both sections so their gap does not clip the vines. */
 .content-designs__vines {
     position: absolute;
     inset: 0;
