@@ -508,6 +508,103 @@ document.querySelectorAll('.marquee').forEach((marquee) => {
     reducedMotion.addEventListener('change', stopSmoothScroll);
 })();
 
+// Reveal profile text on its first viewport entry.
+(() => {
+    const elements = document.querySelectorAll('.profile-section-heading, .profile-about__body');
+    if (!elements.length || !window.gsap || !window.ScrollTrigger) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
+        elements.forEach(element => {
+            gsap.fromTo(element, {
+                clipPath: 'inset(0 100% 0 0)',
+            }, {
+                clipPath: 'inset(0 0% 0 0%)',
+                duration: 1,
+                ease: 'power2.out',
+                clearProps: 'clipPath',
+                scrollTrigger: {
+                    trigger: element,
+                    start: 'top 90%',
+                    once: true,
+                },
+            });
+        });
+    });
+})();
+
+// Observe live heading visibility so earlier pinned sections cannot stale the start position.
+(() => {
+    const headings = document.querySelectorAll('.website-projects__heading, .content-designs__heading, .banner-designs__heading');
+    if (!headings.length || !window.gsap || !window.IntersectionObserver) return;
+
+    gsap.matchMedia().add({
+        motion: '(prefers-reduced-motion: no-preference)',
+        desktop: '(min-width: 1025px)',
+    }, context => {
+        if (!context.conditions.motion) return;
+        const reveals = new Map();
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                reveals.get(entry.target).play();
+                observer.unobserve(entry.target);
+            });
+        }, { rootMargin: '0px 0px -15% 0px', threshold: 0 });
+
+        headings.forEach(heading => {
+            const fromRight = context.conditions.desktop && !!heading.closest('.content-designs--poster');
+            reveals.set(heading, gsap.fromTo(heading.children, {
+                clipPath: fromRight ? 'inset(0 0 0 100%)' : 'inset(0 100% 0 0)',
+            }, {
+                clipPath: 'inset(0 0% 0 0%)',
+                duration: 1,
+                ease: 'power2.out',
+                paused: true,
+                clearProps: 'clipPath',
+            }));
+            observer.observe(heading);
+        });
+        return () => observer.disconnect();
+    });
+})();
+
+// Reveal each visible row from left to right, keeping a trigger for every card.
+(() => {
+    const cards = document.querySelectorAll('.profile-skills .skill-card');
+    if (!cards.length || !window.gsap || !window.ScrollTrigger) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
+        cards.forEach(card => {
+            const reveal = gsap.fromTo(card, {
+                translate: '0px 24px',
+                opacity: 0,
+            }, {
+                translate: '0px 0px',
+                opacity: 1,
+                duration: 0.8,
+                paused: true,
+                ease: 'power2.out',
+                clearProps: 'translate,opacity',
+            });
+            ScrollTrigger.create({
+                trigger: card,
+                start: 'top 90%',
+                once: true,
+                onEnter: () => {
+                    // Read the current layout so resized and single-column grids stay in order.
+                    const column = [...cards].filter(other =>
+                        Math.abs(other.offsetTop - card.offsetTop) <= 1 &&
+                        other.offsetLeft < card.offsetLeft
+                    ).length;
+                    reveal.delay(column * 0.12).restart(true);
+                },
+            });
+        });
+    });
+})();
+
 // Each mobile project has its own device gallery; desktop keeps its scroll-driven track.
 (() => {
     if (typeof Swiper === 'undefined') return;
@@ -537,4 +634,68 @@ document.querySelectorAll('.marquee').forEach((marquee) => {
     }
     mobile.addEventListener('change', updateGalleries);
     updateGalleries();
+})();
+
+// Reveal each footer text block and divider when it enters the viewport.
+(() => {
+    const footer = document.querySelector('.site-footer');
+    if (!footer || !window.gsap || !window.IntersectionObserver) return;
+
+    gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
+        const elements = footer.querySelectorAll('.site-footer__title span, .site-footer__description, .site-footer__divider, .site-footer__email');
+        const reveals = new Map();
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                reveals.get(entry.target).play();
+                observer.unobserve(entry.target);
+            });
+        });
+        elements.forEach(element => {
+            reveals.set(element, gsap.fromTo(element, {
+                clipPath: 'inset(0 100% 0 0)',
+            }, {
+                clipPath: 'inset(0 0% 0 0)',
+                duration: 1,
+                ease: 'power2.out',
+                paused: true,
+                clearProps: 'clipPath',
+            }));
+            observer.observe(element);
+        });
+        return () => observer.disconnect();
+    });
+})();
+
+// Reveal complete website projects and the banner body on viewport entry.
+(() => {
+    const elements = document.querySelectorAll('article.website-project, .banner-designs__body');
+    if (!elements.length || !window.gsap || !window.IntersectionObserver) return;
+
+    gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
+        const reveals = new Map();
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                reveals.get(entry.target).play();
+                observer.unobserve(entry.target);
+            });
+        }, { rootMargin: '0px 0px -10% 0px', threshold: 0 });
+
+        elements.forEach(element => {
+            reveals.set(element, gsap.fromTo(element, {
+                translate: '0px 24px',
+                opacity: 0,
+            }, {
+                translate: '0px 0px',
+                opacity: 1,
+                duration: 0.8,
+                ease: 'power2.out',
+                paused: true,
+                clearProps: 'translate,opacity',
+            }));
+            observer.observe(element);
+        });
+        return () => observer.disconnect();
+    });
 })();

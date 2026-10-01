@@ -430,6 +430,7 @@
 .site-footer__message { width: 100%; }
 .site-footer__title { font-size: clamp(40px, 4.166667vw, 80px); line-height: 1.2625; overflow-wrap: anywhere; }
 .site-footer__title span { display: block; }
+.site-footer__title span, .site-footer__description { width: fit-content; max-width: 100%; }
 .site-footer__description { margin-top: 10px; font-size: 20px; line-height: inherit; }
 .site-footer__divider { flex: none; width: 100%; height: 1px; background: url('../images/footer-divider-pc.svg') center / 100% 1px no-repeat; }
 .site-footer__email { font-size: 40px; line-height: inherit; overflow-wrap: anywhere; max-width: 100%; }
@@ -961,6 +962,28 @@ main {
 
 .skill-card {
     min-width: 0;
+    border-radius: 10px;
+}
+
+@media (min-width: 1025px) and (hover: hover) and (pointer: fine) {
+    .skill-card {
+        transition: transform 250ms ease, box-shadow 250ms ease;
+    }
+
+    .skill-card:hover {
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: 0 8px 8px rgb(0 0 0 / 25%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .skill-card {
+        transition: none;
+    }
+
+    .skill-card:hover {
+        transform: none;
+    }
 }
 
 .skill-card__title {
@@ -1200,6 +1223,7 @@ main {
 .profile-about__body p, .skill-card p { margin-bottom: 0; word-break: normal; }
 .website-projects__heading, .banner-designs__heading { display: flex; flex-direction: column; gap: 20px; width: 100%; padding: 0 80px; margin-inline: 0; border: 0; text-align: left; }
 .section-number { margin: 0; font-size: clamp(40px, 4.166667vw, 80px); line-height: 1.25; }
+.website-projects__heading > *, .content-designs__heading > *, .banner-designs__heading > * { width: fit-content; max-width: 100%; }
 .section-description { margin: 0; font-size: 20px; font-weight: 400; line-height: 1.2; }
 .content-designs__heading { background: transparent; }
 .content-designs__heading > .section-number { font-size: clamp(40px, 4.166667vw, 80px); }
@@ -1218,6 +1242,8 @@ main {
 .website-project__device img { display: block; width: 100%; height: 100%; object-fit: contain; }
 .website-project__device:focus-visible { outline: 2px solid currentColor; outline-offset: -2px; }
 @media (min-width: 1025px) {
+  .skill-list { gap: 40px; }
+  .skill-card { padding: 10px; }
   .content-designs { padding-top: 40px; }
   .content-designs__heading { gap: 20px; }
   .website-projects.is-horizontal { --project-scale: min(1px, calc(100vw / 1920), calc((100dvh - 100px) / 1046)); }
