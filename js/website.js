@@ -114,3 +114,21 @@
 
     reducedMotion.addEventListener('change', stopSmoothScroll);
 })();
+
+(() => {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    document.querySelectorAll('.case-footer a[href^="#"]').forEach((link) => {
+        link.addEventListener('click', (event) => {
+            const target = document.querySelector(link.getAttribute('href'));
+            if (!target) return;
+            event.preventDefault();
+            target.scrollIntoView({ behavior: reducedMotion.matches ? 'instant' : 'smooth', block: 'start' });
+        });
+    });
+    document.querySelector('[data-close-tab]')?.addEventListener('click', () => {
+        window.close();
+        window.setTimeout(() => {
+            document.querySelector('.case-close-message').hidden = false;
+        }, 200);
+    });
+})();

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KIEHL’S Website Redesign | 최윤성</title>
+    <title>KIEHL’S · MARUN Website | 최윤성</title>
     <meta name="description" content="키엘 웹사이트 리디자인 프로젝트의 디자인과 반응형 웹 구현 과정을 소개합니다.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,10 +15,11 @@
     <script src="./js/website.js" defer></script>
 </head>
 <body>
-    <main class="website-case">
+    <main class="website-case" id="page-top">
+        <section class="kiehls-case" aria-labelledby="kiehls-title">
         <header class="case-intro">
             <p class="case-number title-en">01</p>
-            <h1 class="title-en">KIEHL’S WEBSITE REDESIGN</h1>
+            <h1 class="title-en" id="kiehls-title">KIEHL’S WEBSITE REDESIGN</h1>
         </header>
             <nav class="case-links" aria-label="프로젝트 사이트 보기">
                 <a href="https://www.kiehls.co.kr/kr/home" target="_blank" rel="noopener noreferrer" aria-label="Original Website (새 창)">Original Website</a>
@@ -66,6 +67,81 @@
                     <p>메뉴 버튼을 누르면 오버레이가 나오고, 아코디언 메가 메뉴는 화면보다 길어질 수 있기 때문에 오버레이 안에서 스크롤이 되도록 만들었습니다.</p>
                 </div>
             </div>
+        </section>
+        <section class="case-responsive" aria-labelledby="responsive-title">
+            <h2 id="responsive-title">반응형 웹 구현</h2>
+            <div class="case-responsive__body">
+                <div class="case-responsive__visual">
+                    <img src="./images/kiehls-mockups.png" width="1536" height="1024" alt="PC, 태블릿, 모바일 화면에 맞춰 배치된 키엘 리디자인 웹사이트 목업" loading="lazy" decoding="async">
+                </div>
+                <div class="case-responsive__copy case-copy">
+                    <p>PC·태블릿·모바일 환경에 맞춰 레이아웃과 콘텐츠 배치가 조정되는 반응형 웹을 구현했습니다. 가로로 나열된 디자인이 많기 때문에 모바일 환경에서 콘텐츠를 확인하기 쉽도록 세로 또는 그리드 형식으로 만들어 가독성과 탐색 편의성을 높였습니다.</p>
+                    <p>또한 기본적으로 가로 1024px, 768px를 기준으로 미디어 쿼리를 나누었지만 다양한 크기의 화면에서도 디자인이 의도대로 보일 수 있도록 필요한 경우 더 세부적인 breakpoint를 만들었습니다.</p>
+                </div>
+            </div>
+        </section>
+        </section>
+        <section class="marun-case" id="marun" aria-labelledby="marun-title">
+            <header class="case-intro">
+                <p class="case-number title-en">02</p>
+                <h2 class="title-en" id="marun-title">MARUN FURNITURE SHOP</h2>
+            </header>
+            <div class="marun-link"><a href="https://busmaida-rgb.github.io/MARUNportfolio/" target="_blank" rel="noopener noreferrer">Website<span class="visually-hidden"> (새 창)</span></a></div>
+            <div class="case-devices marun-devices" aria-label="MARUN 반응형 웹사이트 목업">
+                <img src="./images/marun-mockup-pc.png" width="1057" height="600" alt="MARUN 노트북 화면" loading="lazy">
+                <img src="./images/marun-mockup-tab.png" width="393" height="500" alt="MARUN 태블릿 화면" loading="lazy">
+                <img src="./images/marun-mockup-mo.png" width="199" height="400" alt="MARUN 모바일 화면" loading="lazy">
+            </div>
+            <dl class="case-facts marun-facts">
+                <dt>제작 기간</dt><dd>4주</dd>
+                <dt>기여도</dt><dd>100% (개인 프로젝트)</dd>
+                <dt>사용 툴</dt><dd>Figma, Git, Visual Studio Code, Codex</dd>
+                <dt>사용 언어</dt><dd>HTML, CSS, JavaScript</dd>
+            </dl>
+            <div class="marun-system">
+                <section aria-labelledby="marun-colors">
+                    <h3 id="marun-colors">Colors</h3>
+                    <div class="marun-palette" role="img" aria-label="메인 컬러 #810B38, 적갈색과 베이지색의 10단계 팔레트">
+                        <div class="marun-palette__main">Main Color<br>#810B38</div>
+                        <div class="marun-palette__shades" aria-hidden="true">
+                            <span style="--swatch:#ffd4d4"></span><span style="--swatch:#fcabab"></span><span style="--swatch:#f68383"></span><span style="--swatch:#ed6161"></span><span style="--swatch:#e04545"></span><span style="--swatch:#ce3030"></span><span style="--swatch:#b72020"></span><span style="--swatch:#9a1515"></span><span style="--swatch:#780e0e"></span><span style="--swatch:#540808"></span>
+                            <span style="--swatch:#f5f0eb"></span><span style="--swatch:#f2d8bd"></span><span style="--swatch:#eebf91"></span><span style="--swatch:#e7a96b"></span><span style="--swatch:#dc944c"></span><span style="--swatch:#ce8235"></span><span style="--swatch:#bc7024"></span><span style="--swatch:#a55e18"></span><span style="--swatch:#8a4d10"></span><span style="--swatch:#6e3c0b"></span>
+                        </div>
+                    </div>
+                    <p class="case-copy">MARUN은 따뜻한 생활 공간을 떠올리게 하는 ‘마루’와 적갈색을 뜻하는 ‘Maroon’을 결합한 이름입니다. 이러한 브랜드의 의미를 담아 깊이 있는 적갈색을 메인 컬러로 선정했습니다. 나무 소재와 어우러지는 따뜻함과 차분한 고급스러움을 통해, 공간에 편안한 균형을 더하는 브랜드의 이미지를 표현했습니다.</p>
+                </section>
+                <section aria-labelledby="marun-typography">
+                    <h3 id="marun-typography">Typography</h3>
+                    <div class="marun-type">
+                        <dl class="marun-type__scale">
+                            <div style="--type-size:39"><dt>메인 타이틀, 큰 제목</dt><dd>39px</dd></div>
+                            <div style="--type-size:31"><dt>콘텐츠 소제목 1</dt><dd>31px</dd></div>
+                            <div style="--type-size:25"><dt>콘텐츠 소제목 2</dt><dd>25px</dd></div>
+                            <div style="--type-size:20"><dt>콘텐츠 소제목 3</dt><dd>20px</dd></div>
+                            <div style="--type-size:16"><dt>본문, 기본 텍스트</dt><dd>16px</dd></div>
+                            <div style="--type-size:13"><dt>세부 설명 텍스트</dt><dd>13px</dd></div>
+                            <div style="--type-size:10"><dt>버튼, 소형 콘텐츠</dt><dd>10px</dd></div>
+                        </dl>
+                        <div class="case-copy">
+                            <p>MARUN이 추구하는 차분하고 정돈된 분위기를 표현하기 위해 Pretendard를 사용했습니다. 간결한 산세리프 형태가 가구 이미지와 자연스럽게 어우러지며, 상품 정보와 긴 설명도 편안하게 읽을 수 있도록 돕습니다.</p>
+                            <p>또한 다양한 굵기를 활용해 제목과 본문의 위계를 구분하고, 한글과 영문이 함께 쓰이는 화면에서도 일관된 인상을 유지했습니다.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <section class="case-responsive marun-responsive" aria-labelledby="marun-responsive-title">
+                <h2 id="marun-responsive-title">반응형 웹 디자인</h2>
+                <div class="case-responsive__body">
+                    <div class="case-responsive__visual"><img src="./images/marun-mockups.png" width="1536" height="1024" alt="MARUN의 PC, 태블릿, 모바일 반응형 웹 디자인" loading="lazy" decoding="async"></div>
+                    <div class="case-responsive__copy case-copy"><p>PC, 태블릿, 모바일 등 다양한 화면 크기에 맞춰 레이아웃이 유연하게 변화하는 반응형 웹으로 제작했습니다. 기기별로 콘텐츠 배치와 이미지 크기, 여백을 조정해 상품 정보의 가독성을 높이고, 작은 화면에서도 편리하게 탐색할 수 있도록 구성했습니다. 화면 크기가 달라져도 MARUN 특유의 차분한 분위기와 일관된 브랜드 경험이 유지되도록 디자인했습니다.</p></div>
+                </div>
+            </section>
+            <nav class="case-footer" aria-label="프로젝트 페이지 이동">
+                <a href="#page-top">01 KIEHL’S<img src="./images/website-return.svg" width="24" height="24" alt="맨 위로"></a>
+                <a href="#marun">02 MARUN<img src="./images/website-return.svg" width="24" height="24" alt="섹션 상단으로"></a>
+                <button type="button" data-close-tab>창 닫기</button>
+                <p class="case-close-message" role="status" hidden>브라우저에서 탭 닫기를 허용하지 않습니다. 브라우저의 탭 닫기 버튼을 이용해 주세요.</p>
+            </nav>
         </section>
     </main>
 </body>
