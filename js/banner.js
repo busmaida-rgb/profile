@@ -1,7 +1,7 @@
 // Read the live panel position so earlier pins and layout changes cannot stale the range.
 (() => {
     const panel = document.querySelector('.banner-designs__panel');
-    const branch = panel?.querySelector('.banner-designs__branch');
+    const branch = panel?.parentElement.querySelector('.banner-designs__branch');
     if (!branch || !window.gsap) return;
 
     gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {

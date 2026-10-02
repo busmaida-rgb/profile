@@ -37,12 +37,15 @@
 
 <body>
   <div class="site-menu">
-    <button class="site-menu__toggle" type="button" aria-expanded="false" aria-controls="site-navigation">MENU</button>
+    <button class="site-menu__toggle" type="button" aria-label="메뉴" aria-expanded="false" aria-controls="site-navigation"><img src="./images/menu-circle.svg" width="20" height="20" alt=""></button>
     <nav id="site-navigation" class="site-menu__links" aria-label="페이지 메뉴" hidden>
-      <a href="#portfolio-title">HOME</a>
-      <a href="#about">ABOUT</a>
+      <a href="#portfolio-title">INTRO</a>
       <a href="#skills">SKILLS</a>
-      <a href="#website-projects">PROJECTS</a>
+      <a href="#website-projects">WEBSITE</a>
+      <a href="#content-designs">POP-UP</a>
+      <a href="#poster-designs">POSTER</a>
+      <a href="#banner-designs">BANNER</a>
+      <a href="#product-detail-pages">PDP</a>
     </nav>
   </div>
   <main>
@@ -253,7 +256,7 @@
         <header class="content-designs__heading">
           <p class="section-number title-en">02</p>
           <h2 id="content-designs-title" class="title-en">POP-UP<br>DESIGNS</h2>
-          <p class="section-description">설명</p>
+          <p class="section-description">짧은 순간에도 핵심 메시지가 전달되도록 디자인한 팝업 작업입니다. 이벤트와 프로모션의 성격에 맞춰 색상과 이미지를 구성하고, 명확한 정보 배치로 사용자의 관심과 참여를 유도했습니다.</p>
         </header>
         <div class="popup-projects">
           <article class="popup-project">
@@ -312,7 +315,7 @@
         <header class="content-designs__heading">
           <p class="section-number title-en">03</p>
           <h2 id="poster-designs-title" class="title-en">POSTER<br>DESIGNS</h2>
-          <p class="section-description">설명</p>
+          <p class="section-description">주제의 분위기와 메시지를 시각적으로 표현한 포스터 작업입니다. 이미지와 타이포그래피의 조화를 통해 시선을 끌고, 정보의 중요도에 따라 크기와 배치를 조정해 내용을 명확하게 전달했습니다.</p>
         </header>
         <div class="popup-projects">
           <article class="popup-project">
@@ -365,13 +368,13 @@
       </section>
     </div>
     <section id="banner-designs" class="banner-designs" aria-labelledby="banner-designs-title">
-      <div class="banner-designs__panel">
         <div class="banner-designs__botanical" aria-hidden="true"><img class="banner-designs__branch"
             src="./images/banner-branch.svg" alt="" width="1600" height="1000" draggable="false"></div>
+      <div class="banner-designs__panel">
         <header class="banner-designs__heading">
           <p class="section-number title-en">04</p>
           <h2 id="banner-designs-title" class="title-en">BANNER DESIGNS</h2>
-          <p class="section-description">설명</p>
+          <p class="section-description">제한된 공간 안에서 핵심 정보를 효과적으로 전달하는 배너 작업입니다. 브랜드와 콘텐츠의 성격에 맞춰 이미지와 문구를 구성하고, 간결한 레이아웃으로 사용자의 시선과 클릭을 유도했습니다.</p>
         </header>
         <div class="banner-designs__body">
           <div class="banner-designs__description">
@@ -426,7 +429,9 @@
     <section id="product-detail-pages" class="product-detail-pages" aria-labelledby="product-detail-pages-title">
       <div class="content-designs__background" aria-hidden="true"><span>DETAIL</span></div>
       <header class="product-detail-pages__heading">
+        <p class="section-number title-en">05</p>
         <h2 id="product-detail-pages-title" class="title-en">PRODUCT DETAIL PAGE</h2>
+        <p class="section-description">상품의 특징과 매력을 체계적으로 전달하는 상세 페이지 작업입니다. 사용자의 시선 흐름에 맞춰 이미지와 정보를 배치하고, 주요 장점이 자연스럽게 드러나도록 구성해 상품에 대한 이해와 구매 결정을 돕고자 했습니다.</p>
       </header>
       <div class="product-detail-pages__swiper swiper" aria-label="상품 상세페이지 디자인">
         <div class="swiper-wrapper">
@@ -437,21 +442,22 @@
                 draggable="false">
               <span class="website-project__overlay" aria-hidden="true">자세히 보기<img src="./images/arrow-right.svg"
                   width="40" height="40" alt=""></span>
-              <img class="website-project__external" src="./images/link-external.svg" width="80" height="80" alt="">
             </a>
             <div class="product-detail-page__description">
-              <h3>상페1</h3>
-              <p>설명<br>설명<br>설명<br>설명</p>
+              <h3>화장품 상세 페이지</h3>
+              <p>아쿠아 밸런스 수분크림의 촉촉하고 산뜻한 이미지를 블루 컬러와 투명한 물방울로 표현한 상세페이지입니다. 주요 성분과 보습 효과를 아이콘과 그래프로 시각화하고, 사용감과 케어 루틴까지 자연스럽게 이어지도록 구성했습니다.</p>
             </div>
           </article>
           <article class="product-detail-page swiper-slide">
             <a class="product-detail-page__thumbnail website-project__thumbnail" href="./pdp1.html" target="_blank"
               rel="noopener noreferrer" aria-label="상페2 자세히 보기 (새 창)">
-              <img class="website-project__image" src="./images/pdpth2.png" alt="상품 상세페이지 디자인 2" loading="lazy"
-                draggable="false">
+              <picture>
+                <source media="(max-width: 1024px)" srcset="./images/pdpth1.png">
+                <img class="website-project__image" src="./images/pdpth2.png" alt="상품 상세페이지 디자인 2" loading="lazy"
+                  draggable="false">
+              </picture>
               <span class="website-project__overlay" aria-hidden="true">자세히 보기<img src="./images/arrow-right.svg"
                   width="40" height="40" alt=""></span>
-              <img class="website-project__external" src="./images/link-external.svg" width="80" height="80" alt="">
             </a>
             <div class="product-detail-page__description">
               <h3>상페2</h3>
@@ -461,11 +467,13 @@
           <article class="product-detail-page swiper-slide">
             <a class="product-detail-page__thumbnail website-project__thumbnail" href="./pdp1.html" target="_blank"
               rel="noopener noreferrer" aria-label="상페3 자세히 보기 (새 창)">
-              <img class="website-project__image" src="./images/pdpth3.png" alt="상품 상세페이지 디자인 3" loading="lazy"
-                draggable="false">
+              <picture>
+                <source media="(max-width: 1024px)" srcset="./images/pdpth1.png">
+                <img class="website-project__image" src="./images/pdpth3.png" alt="상품 상세페이지 디자인 3" loading="lazy"
+                  draggable="false">
+              </picture>
               <span class="website-project__overlay" aria-hidden="true">자세히 보기<img src="./images/arrow-right.svg"
                   width="40" height="40" alt=""></span>
-              <img class="website-project__external" src="./images/link-external.svg" width="80" height="80" alt="">
             </a>
             <div class="product-detail-page__description">
               <h3>상페3</h3>

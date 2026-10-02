@@ -32,6 +32,40 @@
     }, 3000);
 })();
 
+// 각 프로젝트의 시작 위치와 하단 사이에서만 사이트 버튼을 이동합니다.
+(() => {
+    const page = document.querySelector('.website-case');
+    if (!page) return;
+    const links = Array.from(page.querySelectorAll('.case-links, .marun-link'));
+    page.classList.add('has-bounded-links');
+
+    function updateLinks() {
+        const positions = links.map((link) => {
+            const section = link.parentElement;
+            const bounds = section.getBoundingClientRect();
+            // Padding also reserves the same inset below the visible buttons.
+            const inset = parseFloat(getComputedStyle(link).paddingBottom) || 0;
+            const origin = link.offsetTop;
+            const maximum = Math.max(0, section.clientHeight - origin - link.offsetHeight);
+            return Math.min(maximum, Math.max(0, inset - bounds.top - origin));
+        });
+        links.forEach((link, index) => {
+            link.style.transform = `translateY(${positions[index]}px)`;
+        });
+    }
+
+    window.addEventListener('scroll', updateLinks, { passive: true });
+    window.addEventListener('resize', updateLinks, { passive: true });
+    window.addEventListener('pageshow', updateLinks);
+    const observer = new ResizeObserver(updateLinks);
+    links.forEach((link) => {
+        observer.observe(link.parentElement);
+        observer.observe(link);
+    });
+    document.fonts.ready.then(updateLinks);
+    updateLinks();
+})();
+
 // PC 휠 입력만 부드럽게 보간합니다. 터치 스크롤과 접근성 설정은 브라우저 기본 동작을 유지합니다.
 (() => {
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');

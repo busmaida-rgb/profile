@@ -312,6 +312,7 @@ document.querySelectorAll('.content-designs').forEach((section) => {
     function closeMenu() {
         navigation.hidden = true;
         toggle.setAttribute('aria-expanded', 'false');
+        menu.classList.remove('is-open');
     }
 
     let previousScroll = Math.max(0, window.scrollY);
@@ -354,6 +355,8 @@ document.querySelectorAll('.content-designs').forEach((section) => {
         const open = toggle.getAttribute('aria-expanded') !== 'true';
         toggle.setAttribute('aria-expanded', String(open));
         navigation.hidden = !open;
+        menu.classList.toggle('is-open', open);
+        if (open) navigation.querySelector('a')?.focus({ preventScroll: true });
     });
 
     navigation.addEventListener('click', (event) => {

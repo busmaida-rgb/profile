@@ -1,6 +1,6 @@
 /* Banner designs */
 .banner-designs { position: relative; z-index: 3; order: 6; width: 100%; background: var(--page-background); }
-.banner-designs__panel { position: relative; isolation: isolate; display: flex; flex-direction: column; justify-content: center; gap: 80px; height: auto; padding-block: 80px; background: var(--blue); overflow: hidden; }
+.banner-designs__panel { position: relative; z-index: 1; isolation: isolate; display: flex; flex-direction: column; justify-content: center; gap: 80px; height: auto; padding-block: 80px; background: var(--blue); overflow: hidden; }
 .banner-designs__botanical { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; user-select: none; }
 .banner-designs__branch { position: absolute; left: -5%; bottom: 0; width: 115%; height: 120%; max-width: none; max-height: none; object-fit: fill; opacity: .14; transform-origin: 0% 100%; }
 @media (max-width: 1024px) {
@@ -69,7 +69,7 @@
     background: transparent;
 }
 
-/* Share corner ornaments across both sections so their gap does not clip the vines. */
+/* Fixed ornaments share the same viewport positions through sections 02–05. */
 .content-designs__vines {
     position: absolute;
     inset: 0;
@@ -458,47 +458,49 @@ main {
 
 .site-menu {
     position: fixed;
-    top: 40px;
-    right: var(--page-gutter);
+    top: 0;
+    left: 50%;
     z-index: 2147483647;
     opacity: 1;
-    transform: translateY(0);
-    transition: transform 300ms ease, opacity 300ms ease;
+    transform: translate(-50%, 0);
+    transition: transform 300ms ease;
 }
 
 .site-menu.is-scroll-hidden {
-    opacity: 0;
-    transform: translateY(calc(-100% - 40px));
+    transform: translate(-50%, -100%);
     pointer-events: none;
 }
 
 .site-menu__toggle {
-    /* 첫 등장 효과는 버튼에 적용해 메뉴의 스크롤 전환과 분리합니다. */
-    animation: menu-fade-in 450ms 2800ms ease-in-out backwards;
-    padding: 5px 20px;
-    border: 2px solid #000;
-    border-radius: 20px;
-    opacity: 0.7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 128px;
+    padding: 4px 20px;
+    border: 0;
+    border-radius: 0 0 4px 4px;
+    background: rgba(204, 204, 204, .8);
+    backdrop-filter: blur(2px);
     color: #000;
     font: 700 20px / 1.5 'Pretendard', sans-serif;
     cursor: pointer;
 }
 
 .site-menu__links {
-    position: absolute;
-    top: calc(100% + 12px);
-    right: 0;
-    min-width: 160px;
-    padding: 8px;
-    border: 1px solid #000;
-    border-radius: 8px;
-    background: var(--page-background);
+    width: 128px;
+    padding: 10px 20px;
+    border-radius: 0 0 4px 4px;
+    background: rgba(204, 204, 204, .8);
+    backdrop-filter: blur(2px);
+    color: #fff;
+    text-align: center;
 }
+.site-menu__links:not([hidden]) { display: flex; flex-direction: column; gap: 10px; }
+.site-menu.is-open .site-menu__toggle { display: none; }
 
 .site-menu__links a {
     display: block;
-    padding: 12px;
-    font-weight: 700;
+    font: 700 20px / 24px 'Pretendard', sans-serif;
 }
 
 .site-menu__links a:hover {
@@ -686,18 +688,6 @@ main {
 
     to {
         opacity: 1;
-    }
-}
-
-@keyframes menu-fade-in {
-    from {
-        opacity: 0;
-        visibility: hidden;
-    }
-
-    to {
-        opacity: 0.7;
-        visibility: visible;
     }
 }
 
@@ -1042,8 +1032,15 @@ main {
     }
 
     .site-menu {
-        top: 24px;
+        top: 30px;
+        left: auto;
+        right: 51px;
+        transform: translateY(0);
     }
+
+    .site-menu.is-scroll-hidden { transform: translateY(calc(-100% - 30px)); }
+    .site-menu__toggle { width: 60px; opacity: .7; }
+    .site-menu__links { left: auto; right: 0; transform: none; }
 
     .profile-about {
         min-height: 0;
@@ -1147,7 +1144,11 @@ main {
     padding: 160px 40px 80px;
 }
 .product-detail-pages__heading {
-    max-width: 1280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding-inline: 40px;
     margin: 0 auto 80px;
     text-align: center;
 }
@@ -1197,8 +1198,11 @@ main {
         min-width: 0;
         padding-inline: 20px;
     }
-    .product-detail-pages__heading { max-width: 268px; margin-bottom: 40px; }
-    .product-detail-pages__heading h2 { font-size: 40px; }
+    .product-detail-pages__heading { padding-inline: 4px; margin-bottom: 40px; }
+    .product-detail-pages__heading h2 { max-width: 268px; font-size: 40px; }
+    .product-detail-pages__swiper .swiper-wrapper { align-items: center; }
+    .product-detail-page.swiper-slide { width: min(306px, calc(100vw - 40px)); }
+    .product-detail-page__thumbnail.website-project__thumbnail { aspect-ratio: 306 / 497; }
     .product-detail-page__thumbnail .website-project__external {
         top: 20px;
         right: 20px;
@@ -1225,6 +1229,7 @@ main {
 .section-number { margin: 0; font-size: clamp(40px, 4.166667vw, 80px); line-height: 1.25; }
 .website-projects__heading > *, .content-designs__heading > *, .banner-designs__heading > * { width: fit-content; max-width: 100%; }
 .section-description { margin: 0; font-size: 20px; font-weight: 400; line-height: 1.2; }
+.product-detail-pages__heading .section-description { line-height: 1.5; }
 .content-designs__heading { background: transparent; }
 .content-designs__heading > .section-number { font-size: clamp(40px, 4.166667vw, 80px); }
 .content-designs__heading > .section-description { font-size: 20px; font-weight: 400; }

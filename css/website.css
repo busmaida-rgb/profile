@@ -91,7 +91,7 @@
 
 /* Each project bounds its own sticky links. Padding reserves the end inset. */
 .website-case { --sticky-inset: 40px; --maroon: #810b38; padding-bottom: 0; }
-.kiehls-case, .marun-case { display: flow-root; }
+.kiehls-case, .marun-case { position: relative; display: flow-root; }
 .case-links, .marun-link {
     position: sticky;
     top: var(--sticky-inset);
@@ -101,6 +101,7 @@
     pointer-events: none;
 }
 .case-links a, .marun-link a { pointer-events: auto; }
+.website-case.has-bounded-links :is(.case-links, .marun-link) { position: relative; top: 0; }
 .case-links + .case-devices, .marun-link + .case-devices { margin-top: calc(80 * var(--case-unit) - var(--sticky-inset)); }
 .marun-case { margin-top: calc(120 * var(--case-unit)); }
 .marun-case .case-intro { padding-top: 0; }
