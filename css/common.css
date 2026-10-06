@@ -1,3 +1,68 @@
+.cursor-dot {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 4px;
+    pointer-events: none;
+    z-index: 2147483647;
+    visibility: hidden;
+}
+
+.cursor-dot::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 4px;
+    height: 4px;
+    background: #000;
+    transition: opacity 120ms ease;
+}
+
+.cursor-dot span {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: grid;
+    place-items: center;
+    width: max-content;
+    padding: 8px 12px;
+    white-space: nowrap;
+    background: #000;
+    color: #fff;
+    font: 400 12px/1 Arial, sans-serif;
+    opacity: 0;
+    clip-path: inset(0 0 calc(100% - 4px) calc(100% - 4px));
+    transition: opacity 120ms ease, clip-path 180ms ease;
+}
+
+.cursor-dot.is-scroll::before {
+    opacity: 0;
+}
+
+.cursor-dot.is-scroll span {
+    opacity: 1;
+    clip-path: inset(0);
+}
+
+.cursor-dot.is-click span {
+    background: var(--red);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cursor-dot::before,
+    .cursor-dot span {
+        transition: none;
+    }
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .cursor-dot.is-visible {
+        visibility: visible;
+    }
+}
+
 * {
     margin: 0;
     padding: 0;

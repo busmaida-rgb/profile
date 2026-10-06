@@ -10,6 +10,8 @@
     --blue2: #6094B2;
     --blue: #CDDAE6;
     --gray: #57595B;
+    --red: #BE1A1A;
+    --darkyellow: #D8C169;
 }
 
 @media (max-width: 1024px) {

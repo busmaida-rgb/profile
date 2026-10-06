@@ -464,6 +464,20 @@ main {
     opacity: 1;
     transform: translate(-50%, 0);
     transition: transform 300ms ease;
+    animation: site-menu-enter 450ms 1200ms ease-in-out both;
+}
+
+@keyframes site-menu-enter {
+    from {
+        visibility: hidden;
+        opacity: 0;
+        translate: 0 calc(-100% - 30px);
+    }
+    to {
+        visibility: visible;
+        opacity: 1;
+        translate: 0 0;
+    }
 }
 
 .site-menu.is-scroll-hidden {
@@ -495,8 +509,32 @@ main {
     color: #fff;
     text-align: center;
 }
-.site-menu__links:not([hidden]) { display: flex; flex-direction: column; gap: 10px; }
+.site-menu__links:not([hidden]) {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    animation: site-menu-expand 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
 .site-menu.is-open .site-menu__toggle { display: none; }
+.site-menu.is-closing .site-menu__links {
+    position: absolute;
+    top: 0;
+    right: 0;
+    pointer-events: none;
+}
+
+@keyframes site-menu-expand {
+    from {
+        clip-path: inset(0 0 100% 0);
+        translate: 0 -12px;
+        opacity: 0;
+    }
+    to {
+        clip-path: inset(0);
+        translate: 0 0;
+        opacity: 1;
+    }
+}
 
 .site-menu__links a {
     display: block;
@@ -520,7 +558,7 @@ main {
 /* 인트로는 현재 보이는 뷰포트 높이를 채웁니다. */
 .portfolio-intro {
     --title-top: 40px;
-    --intro-marquee-height: clamp(37px, 4.3229167vw, 83px);
+    --intro-marquee-height: 40px;
     /* 화면 여백에 맞춰 함께 축소하며 PORTFOLIO : 이름 = 3 : 2를 유지합니다. */
     --intro-title-size: min(240px, calc((100vw - var(--page-gutter) * 2) * 240 / 1360));
     --intro-name-size: calc(var(--intro-title-size) * 2 / 3);
@@ -663,10 +701,13 @@ main {
     text-transform: uppercase;
 }
 
-.marquee--intro {
+.marquee.marquee--intro {
     z-index: 4;
     bottom: 0;
-    height: var(--intro-marquee-height);
+    height: auto;
+    padding-block: 10px;
+    font-size: 20px;
+    line-height: 1;
     color: #ffffff;
     background: var(--main);
 }
@@ -677,8 +718,8 @@ main {
 }
 
 .marquee--intro {
-    /* 이름 페이드 인이 완료되면 마퀴를 표시합니다. */
-    animation: marquee-fade-in 450ms 2350ms ease-in-out both;
+    /* 패널의 대기 200ms + 펼침 1000ms 이후 메뉴와 함께 표시합니다. */
+    animation: marquee-fade-in 450ms 1200ms ease-in-out both;
 }
 
 @keyframes marquee-fade-in {
@@ -722,6 +763,7 @@ main {
     }
 
     .site-menu__toggle,
+    .site-menu__links:not([hidden]),
     .portfolio-intro__title,
     .portfolio-intro__image,
     .portfolio-intro__name,
@@ -731,6 +773,7 @@ main {
 
     .site-menu {
         transition: none;
+        animation: none;
     }
 
     .portfolio-intro__image {
@@ -740,7 +783,7 @@ main {
 
 @media (min-width: 769px) and (max-width: 1200px) {
     .portfolio-intro {
-        --intro-marquee-height: clamp(48px, 5vw, 60px);
+        --intro-marquee-height: 40px;
     }
 
     .marquee {
@@ -750,7 +793,7 @@ main {
 
 @media (max-width: 768px) {
     .portfolio-intro {
-        --intro-marquee-height: 46px;
+        --intro-marquee-height: 40px;
     }
 
     .marquee {
@@ -1031,17 +1074,6 @@ main {
         flex-shrink: 0;
     }
 
-    .site-menu {
-        top: 30px;
-        left: auto;
-        right: 51px;
-        transform: translateY(0);
-    }
-
-    .site-menu.is-scroll-hidden { transform: translateY(calc(-100% - 30px)); }
-    .site-menu__toggle { width: 60px; opacity: .7; }
-    .site-menu__links { left: auto; right: 0; transform: none; }
-
     .profile-about {
         min-height: 0;
     }
@@ -1188,7 +1220,6 @@ main {
     flex-direction: column;
     gap: 20px;
     margin-top: 40px;
-    padding-inline: 20px;
 }
 .product-detail-page__description h3 { font-size: 40px; font-weight: 700; line-height: 1.2; }
 .product-detail-page__description p { font-size: 20px; line-height: inherit; }
@@ -1209,7 +1240,7 @@ main {
         width: 40px;
         height: 40px;
     }
-    .product-detail-page__description { gap: 10px; margin-top: 20px; padding-inline: 10px; }
+    .product-detail-page__description { gap: 10px; margin-top: 20px; }
     .product-detail-page__description h3 { font-size: 20px; }
     .product-detail-page__description p { font-size: 16px; }
 }
@@ -1302,7 +1333,84 @@ main {
 }
 
 @media (max-width: 1024px) {
-  .portfolio-intro { --intro-title-size: clamp(48px, 14.92537vw, 60px); --intro-name-size: 40px; --intro-marquee-height: 83px; --image-width: max(100vw, 733px); --image-height: min(489px, 48.27246svh); }
+  .portfolio-intro { --intro-title-size: clamp(48px, 14.92537vw, 60px); --intro-name-size: 40px; --intro-marquee-height: 40px; --image-width: max(100vw, 733px); --image-height: min(489px, 48.27246svh); }
   .portfolio-intro__image { width: 100%; }
-  .marquee--intro { font-size: 40px; }
+}
+
+/* Figma intro: viewport height and the existing marquee remain independent. */
+.portfolio-intro {
+    display: block;
+    min-height: 0;
+    height: 100vh;
+    height: 100dvh;
+}
+.portfolio-intro__panel {
+    position: absolute;
+    inset: 12.5% 12.5%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: min(4.166667vw, 7.407407dvh);
+    background: var(--gray);
+    color: #fff;
+    isolation: isolate;
+    /* Reveal the panel without scaling or reflowing its contents. */
+    animation: intro-panel-reveal 1000ms 200ms cubic-bezier(0.76, 0, 0.24, 1) both;
+}
+@keyframes intro-panel-reveal {
+    from { clip-path: inset(46% 46%); }
+    to { clip-path: inset(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .portfolio-intro__panel { animation: none; }
+}
+.portfolio-intro__headline,
+.portfolio-intro__closing {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    font-size: min(4.166667vw, 7.407407dvh);
+    font-weight: 700;
+    line-height: normal;
+    text-align: center;
+    white-space: nowrap;
+}
+.portfolio-intro__roles {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    font-size: min(1.041667vw, 1.851852dvh);
+    font-weight: 500;
+    line-height: normal;
+}
+.portfolio-intro__plant {
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+    /* Let panel height size the artwork before the available width limits it. */
+    width: 100%;
+    height: 74.814815%;
+    max-height: calc(100% - min(16.666667vw, 29.62963dvh));
+    transform: translate(-50%, -50%);
+    overflow: visible;
+    pointer-events: none;
+    color: var(--darkyellow);
+}
+.portfolio-intro__plant path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.portfolio-intro .marquee--intro { position: absolute; bottom: 0; }
+@media (max-width: 600px) and (orientation: portrait) {
+    .portfolio-intro__panel { inset: 12.5% var(--page-gutter); padding: 8% 5%; }
+    .portfolio-intro__headline,
+    .portfolio-intro__closing { font-size: 5.2vw; white-space: normal; }
+    .portfolio-intro__roles { font-size: clamp(8px, 2.2vw, 13px); }
+    .portfolio-intro__plant { height: 80%; }
 }

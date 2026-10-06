@@ -309,10 +309,37 @@ document.querySelectorAll('.content-designs').forEach((section) => {
     const navigation = menu?.querySelector('nav');
     if (!toggle || !navigation) return;
 
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let closingAnimation;
+
     function closeMenu() {
-        navigation.hidden = true;
+        if (toggle.getAttribute('aria-expanded') !== 'true') return;
+        const style = getComputedStyle(navigation);
+        const currentFrame = {
+            clipPath: style.clipPath,
+            translate: style.translate,
+            opacity: style.opacity
+        };
         toggle.setAttribute('aria-expanded', 'false');
         menu.classList.remove('is-open');
+        navigation.inert = true;
+
+        if (reducedMotion.matches) {
+            navigation.hidden = true;
+            return;
+        }
+
+        menu.classList.add('is-closing');
+        closingAnimation = navigation.animate([
+            currentFrame,
+            { clipPath: 'inset(0 0 100% 0)', translate: '0 -12px', opacity: 0 }
+        ], { duration: 260, easing: 'cubic-bezier(0.4, 0, 1, 1)', fill: 'forwards' });
+        closingAnimation.onfinish = () => {
+            navigation.hidden = true;
+            menu.classList.remove('is-closing');
+            closingAnimation.cancel();
+            closingAnimation = undefined;
+        };
     }
 
     let previousScroll = Math.max(0, window.scrollY);
@@ -353,6 +380,16 @@ document.querySelectorAll('.content-designs').forEach((section) => {
 
     toggle.addEventListener('click', () => {
         const open = toggle.getAttribute('aria-expanded') !== 'true';
+        if (!open) {
+            closeMenu();
+            return;
+        }
+        if (closingAnimation) {
+            closingAnimation.cancel();
+            closingAnimation = undefined;
+        }
+        menu.classList.remove('is-closing');
+        navigation.inert = false;
         toggle.setAttribute('aria-expanded', String(open));
         navigation.hidden = !open;
         menu.classList.toggle('is-open', open);
@@ -504,6 +541,26 @@ document.querySelectorAll('.marquee').forEach((marquee) => {
 
     window.addEventListener('pointerdown', stopSmoothScroll, { passive: true });
     window.addEventListener('keydown', stopSmoothScroll);
+    document.querySelector('.site-menu__links')?.addEventListener('click', (event) => {
+        const link = event.target.closest('a[href^="#"]');
+        if (!link || event.defaultPrevented || event.button !== 0 ||
+            event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+        const target = document.getElementById(link.hash.slice(1));
+        if (!target) return;
+
+        event.preventDefault();
+        stopSmoothScroll();
+        // 고정된 WEBSITE 섹션도 현재 화면 위치가 아닌 고정 시작점으로 이동합니다.
+        const pinned = window.ScrollTrigger?.getAll().find(trigger =>
+            trigger.trigger === target && trigger.pin);
+        const margin = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+        const top = (pinned ? pinned.start : target.getBoundingClientRect().top + window.scrollY) - margin;
+        if (window.location.hash !== link.hash) history.pushState(null, '', link.hash);
+        window.scrollTo({
+            top: Math.min(getMaxScroll(), Math.max(0, top)),
+            behavior: reducedMotion.matches ? 'instant' : 'smooth',
+        });
+    });
     window.addEventListener('resize', () => {
         targetScroll = Math.min(targetScroll, getMaxScroll());
     }, { passive: true });
@@ -538,7 +595,7 @@ document.querySelectorAll('.marquee').forEach((marquee) => {
 
 // Observe live heading visibility so earlier pinned sections cannot stale the start position.
 (() => {
-    const headings = document.querySelectorAll('.website-projects__heading, .content-designs__heading, .banner-designs__heading');
+    const headings = document.querySelectorAll('.website-projects__heading, .content-designs__heading, .banner-designs__heading, .product-detail-pages__heading');
     if (!headings.length || !window.gsap || !window.IntersectionObserver) return;
 
     gsap.matchMedia().add({
@@ -556,9 +613,10 @@ document.querySelectorAll('.marquee').forEach((marquee) => {
         }, { rootMargin: '0px 0px -15% 0px', threshold: 0 });
 
         headings.forEach(heading => {
+            const fromCenter = heading.matches('.product-detail-pages__heading');
             const fromRight = context.conditions.desktop && !!heading.closest('.content-designs--poster');
             reveals.set(heading, gsap.fromTo(heading.children, {
-                clipPath: fromRight ? 'inset(0 0 0 100%)' : 'inset(0 100% 0 0)',
+                clipPath: fromCenter ? 'inset(0 50% 0 50%)' : fromRight ? 'inset(0 0 0 100%)' : 'inset(0 100% 0 0)',
             }, {
                 clipPath: 'inset(0 0% 0 0%)',
                 duration: 1,
