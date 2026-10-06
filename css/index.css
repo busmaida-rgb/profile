@@ -282,7 +282,15 @@
 
 .website-project__number { font-size: 40px; line-height: inherit; }
 .website-project__info h3 { font-size: 20px; font-weight: 600; line-height: 1.2; }
-.website-project__type { margin-top: 10px; font-size: 16px; line-height: inherit; }
+.website-project__type {
+    width: 400px;
+    max-width: 100%;
+    margin-top: 10px;
+    font-size: 16px;
+    line-height: inherit;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
 
 .website-project__thumbnail {
     position: relative;
@@ -1297,7 +1305,19 @@ main {
   .website-project__devices { gap: calc(80 * var(--project-scale)); width: max-content; }
 }
 @media (max-width: 1024px) {
-  .profile-content__media { position: relative; order: 2; top: auto; height: auto; max-height: none; aspect-ratio: 354 / 572; margin: 24px var(--page-gutter) 0; translate: none; clip-path: none; background-size: cover; }
+  .profile-content__media {
+    position: relative;
+    order: 2;
+    top: auto;
+    width: min(calc(100% - var(--page-gutter) * 2), 354px, calc(60svh * 354 / 572));
+    height: auto;
+    max-height: 60svh;
+    aspect-ratio: 354 / 572;
+    margin: 24px auto 0;
+    translate: none;
+    clip-path: none;
+    background-size: cover;
+  }
   .profile-content { --panel-padding: 20px; margin-top: 24px; padding-bottom: 0; }
   .profile-content::before { display: none; }
   .profile-content__body { padding-block: 20px; }
