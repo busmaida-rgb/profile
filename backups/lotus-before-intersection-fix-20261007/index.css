@@ -1372,8 +1372,8 @@ main {
     align-items: center;
     justify-content: space-between;
     padding: min(4.166667vw, 7.407407dvh);
-    background: transparent;
-    color: var(--gray);
+    background: var(--gray);
+    color: #fff;
     isolation: isolate;
 }
 .portfolio-intro__headline,
@@ -1398,8 +1398,8 @@ main {
 }
 .portfolio-intro__lotus {
     /* Adjust artwork size and placement here; camera keeps the petals in frame. */
-    --lotus-width: 80%;
-    --lotus-height: 84%;
+    --lotus-width: 60%;
+    --lotus-height: 72%;
     position: absolute;
     z-index: 0;
     top: 50%;
@@ -1419,17 +1419,11 @@ main {
     pointer-events: none;
 }
 .portfolio-intro .marquee--intro { position: absolute; bottom: 0; }
-@media (max-width: 1024px) {
-    /* Keep tablet and mobile artwork sizing continuous across 600px. */
-    .portfolio-intro { min-height: 560px; }
-    .portfolio-intro__panel { inset: 12.5% var(--page-gutter); padding: clamp(20px, 4vw, 40px) 0; }
+@media (max-width: 600px) and (orientation: portrait) {
+    .portfolio-intro__panel { inset: 12.5% var(--page-gutter); padding: 8% 5%; }
     .portfolio-intro__headline,
-    .portfolio-intro__closing { font-size: clamp(24px, 5.2vw, 48px); white-space: normal; }
-    .portfolio-intro__lotus {
-        --lotus-width: min(900px, calc(100vw - 16px));
-        --lotus-height: 84%;
-        top: 47%;
-    }
+    .portfolio-intro__closing { font-size: 5.2vw; white-space: normal; }
+    .portfolio-intro__lotus { --lotus-width: 100%; --lotus-height: 64%; top: 47%; }
 }
 @media (max-width: 1024px) {
     .portfolio-intro__roles {
