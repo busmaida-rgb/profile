@@ -1357,91 +1357,60 @@ main {
   .portfolio-intro__image { width: 100%; }
 }
 
-/* Figma intro: viewport height and the existing marquee remain independent. */
-.portfolio-intro {
-    display: block;
-    min-height: 0;
-    height: 100vh;
-    height: 100dvh;
-}
+/* Figma intro: corner copy, a large central flower and the original sage ellipse. */
+.portfolio-intro { display: block; min-height: 640px; height: 100vh; height: 100dvh; }
 .portfolio-intro__panel {
     position: absolute;
-    inset: 12.5% 12.5%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    padding: min(4.166667vw, 7.407407dvh);
-    background: transparent;
-    color: var(--gray);
+    inset: 0 0 var(--intro-marquee-height);
+    overflow: hidden;
     isolation: isolate;
+    background: var(--beige);
+    color: var(--gray);
+}
+.portfolio-intro__panel::before {
+    content: '';
+    position: absolute;
+    left: 11.197917%;
+    top: 46.666667%;
+    width: max(105.677083%, 1100px);
+    aspect-ratio: 2029 / 769;
+    background: url('../images/intro-ellipse.svg') center / contain no-repeat;
+    pointer-events: none;
 }
 .portfolio-intro__headline,
 .portfolio-intro__closing {
-    position: relative;
-    z-index: 1;
+    position: absolute;
+    z-index: 2;
     margin: 0;
-    font-size: min(4.166667vw, 7.407407dvh);
+    font-size: clamp(40px, 4.166667vw, 80px);
     font-weight: 700;
     line-height: normal;
-    text-align: center;
-    white-space: nowrap;
 }
-.portfolio-intro__roles {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    font-size: min(1.041667vw, 1.851852dvh);
-    font-weight: 500;
-    line-height: normal;
-}
+.portfolio-intro__headline { top: 7.407407%; left: 4.166667%; }
+.portfolio-intro__closing { right: 4.166667%; bottom: 7.407407%; text-align: right; }
 .portfolio-intro__lotus {
-    /* Adjust artwork size and placement here; camera keeps the petals in frame. */
-    --lotus-width: 80%;
-    --lotus-height: 84%;
     position: absolute;
-    z-index: 0;
+    z-index: 1;
     top: 50%;
     left: 50%;
-    width: var(--lotus-width);
-    height: var(--lotus-height);
+    width: min(96%, max(46%, 640px));
+    height: max(56%, 420px);
     transform: translate(-50%, -50%);
-    overflow: hidden;
     pointer-events: none;
     user-select: none;
     contain: layout paint;
 }
-.portfolio-intro__lotus canvas {
-    display: block;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-}
+.portfolio-intro__lotus canvas { display: block; width: 100%; height: 100%; }
 .portfolio-intro .marquee--intro { position: absolute; bottom: 0; }
-@media (max-width: 1024px) {
-    /* Keep tablet and mobile artwork sizing continuous across 600px. */
-    .portfolio-intro { min-height: 560px; }
-    .portfolio-intro__panel { inset: 12.5% var(--page-gutter); padding: clamp(20px, 4vw, 40px) 0; }
-    .portfolio-intro__headline,
-    .portfolio-intro__closing { font-size: clamp(24px, 5.2vw, 48px); white-space: normal; }
-    .portfolio-intro__lotus {
-        --lotus-width: min(900px, calc(100vw - 16px));
-        --lotus-height: 84%;
-        top: 47%;
-    }
+@media (max-width: 600px) {
+    .portfolio-intro { min-height: 600px; }
+    .portfolio-intro__headline, .portfolio-intro__closing { font-size: clamp(26px, 7.2vw, 36px); }
+    .portfolio-intro__headline { top: 9%; left: var(--page-gutter); }
+    .portfolio-intro__closing { right: var(--page-gutter); bottom: 9%; }
+    .portfolio-intro__lotus { width: 96%; height: max(48%, 300px); }
+    .portfolio-intro__panel::before { left: 5%; top: 49%; width: max(190%, 1000px); }
 }
-@media (max-width: 1024px) {
-    .portfolio-intro__roles {
-        position: absolute;
-        top: calc(100% + min(20px, 2dvh));
-        left: 0;
-        width: 100%;
-        justify-content: center;
-        gap: clamp(16px, 4vw, 40px);
-        color: var(--gray);
-        font-size: clamp(10px, 1.8vw, 14px);
-        text-align: center;
-    }
-    .portfolio-intro__roles p { margin: 0; }
+@media (prefers-reduced-motion: no-preference) {
+    .portfolio-intro__headline, .portfolio-intro__closing { animation: marquee-fade-in 1000ms 150ms both; }
+    .portfolio-intro__closing { animation-delay: 350ms; }
 }

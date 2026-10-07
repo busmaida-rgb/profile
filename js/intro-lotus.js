@@ -3,13 +3,14 @@ import * as THREE from './vendor/three.module.min.js';
 // Visual controls: scene units, seconds and hexadecimal colours.
 const LOTUS = {
     scale: 1, position: { x: 0, y: 0, z: 0 },
-    ivory: '#fff0ec', tip: '#df7e9f', tipStrength: 0.85,
+    ivory: '#fffaf6', tip: '#e15c83', tipStrength: 0.96,
     fadeDuration: 1.5, bloomDuration: 2,
     bloomRotation: Math.PI * 2 / 3, restingRotation: 0.22,
     accelerationEnd: 0.30,
     pointerTilt: { x: 0.06, y: 0.10, followSpeed: 4 },
-    floatAmplitude: 0.025, floatPeriod: 9, maxPixelRatio: 2,
+    maxPixelRatio: 2,
 };
+
 
 // Asymmetric ease-in-out: accelerate during the first 30%, then gently decelerate.
 function bloomEase(progress) {
@@ -35,26 +36,27 @@ function mount() {
     renderer.setPixelRatio(Math.min(devicePixelRatio || 1, LOTUS.maxPixelRatio));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.15;
-    canvas.style.opacity = '0';
+    renderer.toneMappingExposure = 1.05;
+    canvas.style.opacity = '1';
     host.append(canvas);
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(33, 1, 0.1, 40);
     camera.position.set(0, 5.4, 8.4);
     camera.lookAt(0, 0.9, 0);
-    scene.add(new THREE.HemisphereLight('#fff5e8', '#9b8490', 2.1));
-    const key = new THREE.DirectionalLight('#fff2df', 3.1);
+    scene.add(new THREE.HemisphereLight('#fffaf7', '#a76d7c', 1.8));
+    const key = new THREE.DirectionalLight('#ffffff', 2.5);
     key.position.set(-3, 6, 5); scene.add(key);
-    const fill = new THREE.DirectionalLight('#e7ebff', 1.15);
+    const fill = new THREE.DirectionalLight('#fff7f3', 1.15);
     fill.position.set(4, 2, -3); scene.add(fill);
     const flower = new THREE.Group();
     flower.scale.setScalar(LOTUS.scale);
-    flower.position.set(LOTUS.position.x, LOTUS.position.y, LOTUS.position.z);
+    const flowerY = LOTUS.position.y;
+    flower.position.set(LOTUS.position.x, flowerY, LOTUS.position.z);
     flower.rotation.y = LOTUS.restingRotation - LOTUS.bloomRotation;
     scene.add(flower);
     const material = new THREE.MeshPhysicalMaterial({
         vertexColors: true, roughness: 0.43, metalness: 0,
-        sheen: 0.35, sheenColor: new THREE.Color('#fff1e6'), sheenRoughness: 0.7,
+        sheen: 0.18, sheenColor: new THREE.Color('#fff7f3'), sheenRoughness: 0.7,
         clearcoat: 0.06, clearcoatRoughness: 0.6, side: THREE.DoubleSide,
     });
     const ivory = new THREE.Color(LOTUS.ivory), pink = new THREE.Color(LOTUS.tip);
@@ -81,8 +83,8 @@ function mount() {
                     positions.push(breadth * u, length * (t - 0.08 * Math.sin(Math.PI * t)),
                         curl * t * t * t + belly * Math.sin(Math.PI * t) +
                         edgeCup * u * u * Math.sin(Math.PI * t) + (side ? -thickness : thickness));
-                    // A soft blush reaches the middle while the root stays ivory.
-                    const tint = Math.pow(t, 1.3) * LOTUS.tipStrength + 0.025 * Math.abs(u);
+                    // Keep a broad white base, with a soft pink gradient toward the tip.
+                    const tint = Math.min(1, Math.pow(Math.max(0, (t - 0.12) / 0.88), 0.95) * LOTUS.tipStrength + 0.015 * Math.abs(u) * t);
                     const color = ivory.clone().lerp(pink, tint);
                     colors.push(color.r, color.g, color.b);
                 }
@@ -129,6 +131,9 @@ function mount() {
             petals.push({ hinge, mesh, open: ring.open + variation * 0.045, delay: layer * 0.6 + i * 0.025 });
         }
     });
+    function waterMotion(time) {
+        return Math.sin(time * Math.PI * 2 / 12) * 0.007;
+    }
     const motion = matchMedia('(prefers-reduced-motion: reduce)');
     const mouse = matchMedia('(hover: hover) and (pointer: fine)');
     const pointer = { x: 0, y: 0 };
@@ -167,11 +172,15 @@ function mount() {
         resetPointer();
         flower.rotation.x = 0;
         flower.rotation.y = LOTUS.restingRotation;
-        flower.position.y = LOTUS.position.y;
+        flower.position.y = flowerY;
         host.dataset.lotusState = 'open';
     }
     function draw() {
-        canvas.style.opacity = String(state.opacity);
+        // Fade only flower materials; the shared canvas remains fully opaque.
+        material.transparent = state.opacity < 1;
+        receptacleMaterial.transparent = state.opacity < 1;
+        material.opacity = receptacleMaterial.opacity = state.opacity;
+        flower.visible = state.opacity > 0;
         renderer.render(scene, camera);
     }
     function stop() { cancelAnimationFrame(frame); frame = 0; lastTime = 0; timeline?.pause(); }
@@ -181,7 +190,7 @@ function mount() {
         if (completed) {
             const delta = lastTime ? Math.min((time - lastTime) / 1000, 0.1) : 0;
             floatTime += delta;
-            flower.position.y = LOTUS.position.y + Math.sin(floatTime * Math.PI * 2 / LOTUS.floatPeriod) * LOTUS.floatAmplitude;
+            flower.position.y = flowerY + waterMotion(floatTime);
             const blend = 1 - Math.exp(-LOTUS.pointerTilt.followSpeed * delta);
             flower.rotation.x = THREE.MathUtils.lerp(flower.rotation.x, pointer.y * LOTUS.pointerTilt.x, blend);
             flower.rotation.y = THREE.MathUtils.lerp(flower.rotation.y, LOTUS.restingRotation + pointer.x * LOTUS.pointerTilt.y, blend);
@@ -206,8 +215,16 @@ function mount() {
         renderer.setPixelRatio(Math.min(devicePixelRatio || 1, LOTUS.maxPixelRatio));
         renderer.setSize(width, height, false);
         camera.aspect = width / height;
-        // Fit the complete flower in narrow containers as well as landscape screens.
-        camera.fov = THREE.MathUtils.radToDeg(2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(33 / 2)) / Math.min(1, camera.aspect)));
+        // Frame the flower itself, with room for its opening rotation.
+        const frameWidth = 5.2, frameHeight = 3.6;
+        const target = new THREE.Vector3(0, 0.85, 0);
+        // Preserve the original viewing angle; only recenter the common water plane.
+        const forward = new THREE.Vector3(0, 4.5, 8.4).normalize();
+        const distance = Math.max(frameHeight, frameWidth / camera.aspect) / (2 * Math.tan(THREE.MathUtils.degToRad(33 / 2)));
+        camera.position.copy(target).addScaledVector(forward, distance);
+        camera.lookAt(target);
+        camera.far = distance + 30;
+        camera.fov = 33;
         camera.updateProjectionMatrix();
         if (visible && !document.hidden) draw();
     }
