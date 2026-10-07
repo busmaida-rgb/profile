@@ -13,16 +13,6 @@ const LOTUS = {
 };
 
 
-// Water controls: scene units and seconds; point size is in CSS pixels.
-const WATER = {
-    count: 7200, mobileCount: 2400, mobileBreakpoint: 600,
-    radius: 9, innerRadius: 0.30, level: -0.40,
-    pointSize: 3.0, color: '#B8B8B8', opacity: 0.72,
-    speed: 0.65, wavelength: 1.65, amplitude: 0.085,
-    interval: 5.5, envelopeWidth: 1.8, damping: 0.16,
-    edgeFade: 0.30, mobilePixelRatio: 1.25,
-};
-
 // Asymmetric ease-in-out: accelerate during the first 30%, then gently decelerate.
 function bloomEase(progress) {
     const split = LOTUS.accelerationEnd;
@@ -148,92 +138,6 @@ function mount() {
             petals.push({ hinge, mesh, open: ring.open + variation * 0.045, delay: layer * 0.6 + i * 0.025 });
         }
     });
-
-    // Fixed world-space water; never parent it to flower, spin or tilt.
-    const waterGeometry = new THREE.BufferGeometry();
-    const waterMaterial = new THREE.ShaderMaterial({
-        transparent: true, depthTest: true, depthWrite: false,
-        uniforms: {
-            uTime: { value: 0 }, uMotion: { value: 1 },
-            uColor: { value: new THREE.Color(WATER.color) },
-            uOpacity: { value: WATER.opacity }, uSize: { value: WATER.pointSize },
-            uPixelRatio: { value: 1 }, uRadius: { value: WATER.radius },
-            uSpeed: { value: WATER.speed }, uWavelength: { value: WATER.wavelength },
-            uAmplitude: { value: WATER.amplitude }, uInterval: { value: WATER.interval },
-            uWidth: { value: WATER.envelopeWidth }, uDamping: { value: WATER.damping },
-            uEdgeFade: { value: WATER.edgeFade },
-        },
-        vertexShader: `
-            uniform float uTime, uMotion, uSize, uPixelRatio, uRadius;
-            uniform float uSpeed, uWavelength, uAmplitude, uInterval, uWidth, uDamping, uEdgeFade;
-            attribute float aVariation;
-            varying float vOpacity, vShade;
-            void main() {
-                float r = length(position.xz);
-                // Retarded time: each radius receives the same pulse later.
-                float arrival = uTime - r / uSpeed;
-                float phase = mod(arrival + uInterval * 0.5, uInterval) - uInterval * 0.5;
-                float height = 0.0;
-                // Smooth overlapping Gaussian packets; wrap occurs only at negligible tails.
-                for (int i = -2; i <= 2; i++) {
-                    float age = phase + float(i) * uInterval;
-                    float distanceFromCrest = -uSpeed * age;
-                    float envelope = exp(-pow(distanceFromCrest / uWidth, 2.0));
-                    height += sin(6.2831853 * distanceFromCrest / uWavelength) * envelope;
-                }
-                height *= uAmplitude * exp(-uDamping * r) * smoothstep(0.3, 0.85, r) * uMotion;
-                vec3 p = position;
-                p.y += height;
-                vOpacity = (1.0 - smoothstep(uRadius * (1.0 - uEdgeFade), uRadius, r))
-                    * smoothstep(0.30, 0.7, r);
-                vShade = 1.0 + height * 0.35;
-                gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
-                gl_PointSize = uSize * uPixelRatio * aVariation;
-            }
-        `,
-        fragmentShader: `
-            uniform vec3 uColor;
-            uniform float uOpacity;
-            varying float vOpacity, vShade;
-            void main() {
-                float d = length(gl_PointCoord - 0.5);
-                float coverage = 1.0 - smoothstep(0.34, 0.5, d);
-                if (coverage < 0.01) discard;
-                gl_FragColor = vec4(uColor * vShade, coverage * vOpacity * uOpacity);
-                #include <colorspace_fragment>
-            }
-        `,
-    });
-    const water = new THREE.Points(waterGeometry, waterMaterial);
-    water.position.set(LOTUS.position.x, WATER.level + flowerY, LOTUS.position.z);
-    water.frustumCulled = false;
-    scene.add(water);
-    let waterCount = 0, waterTime = 0;
-    function populateWater(mobile) {
-        const count = mobile ? WATER.mobileCount : WATER.count;
-        if (waterCount === count) return;
-        waterCount = count;
-        const positions = [], variations = [];
-        const spacing = Math.sqrt(Math.PI * WATER.radius ** 2 / count);
-        // Uniform staggered grid on a circular XZ surface; deterministic tiny jitter.
-        let row = 0;
-        for (let z = -WATER.radius; z <= WATER.radius; z += spacing, row++) {
-            for (let x = -WATER.radius; x <= WATER.radius; x += spacing) {
-                const seed = Math.sin(row * 127.1 + x * 311.7) * 43758.5453;
-                const jitter = seed - Math.floor(seed) - 0.5;
-                const px = x + (row % 2) * spacing * 0.5 + jitter * spacing * 0.16;
-                const pz = z + Math.sin(seed) * spacing * 0.08;
-                const r = Math.hypot(px, pz);
-                if (r > WATER.radius || r < WATER.innerRadius) continue;
-                positions.push(px, 0, pz);
-                variations.push(1 + jitter * 0.12);
-            }
-        }
-        waterGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-        waterGeometry.setAttribute('aVariation', new THREE.Float32BufferAttribute(variations, 1));
-        waterGeometry.computeBoundingSphere();
-    }
-
     function waterMotion(time) {
         return Math.sin(time * Math.PI * 2 / 12) * 0.007;
     }
@@ -286,7 +190,6 @@ function mount() {
         receptacleMaterial.transparent = state.opacity < 1;
         material.opacity = receptacleMaterial.opacity = state.opacity;
         flower.visible = state.opacity > 0;
-        waterMaterial.uniforms.uMotion.value = motion.matches ? 0 : 1;
         renderer.render(scene, camera);
     }
     function stop() { cancelAnimationFrame(frame); frame = 0; lastTime = 0; timeline?.pause(); }
@@ -310,9 +213,6 @@ function mount() {
             tilt.rotation.x = THREE.MathUtils.lerp(tilt.rotation.x, pointer.y * LOTUS.pointerTilt.x, blend);
             tilt.rotation.z = THREE.MathUtils.lerp(tilt.rotation.z, -pointer.x * LOTUS.pointerTilt.z, blend);
         }
-        // Uncapped elapsed time keeps waves consistent on slow frames.
-        waterTime += lastTime ? (time - lastTime) / 1000 : 0;
-        waterMaterial.uniforms.uTime.value = waterTime;
         lastTime = time; draw(); frame = requestAnimationFrame(tick);
     }
     function sync() {
@@ -330,15 +230,8 @@ function mount() {
     function resize() {
         const { width, height } = host.getBoundingClientRect();
         if (!width || !height || dead) return;
-        const panel = host.parentElement.getBoundingClientRect();
-        const rect = host.getBoundingClientRect();
-        const mobile = panel.width <= WATER.mobileBreakpoint;
-        populateWater(mobile);
-        renderer.setPixelRatio(Math.min(devicePixelRatio || 1, mobile ? WATER.mobilePixelRatio : LOTUS.maxPixelRatio));
-        waterMaterial.uniforms.uPixelRatio.value = renderer.getPixelRatio();
-        renderer.setSize(panel.width, panel.height, false);
-        Object.assign(canvas.style, { position: 'absolute', left: (panel.left - rect.left) + 'px',
-            top: (panel.top - rect.top) + 'px', width: panel.width + 'px', height: panel.height + 'px' });
+        renderer.setPixelRatio(Math.min(devicePixelRatio || 1, LOTUS.maxPixelRatio));
+        renderer.setSize(width, height, false);
         camera.aspect = width / height;
         // Frame the flower itself, with room for its opening rotation.
         const frameWidth = 5.2, frameHeight = 3.6;
@@ -349,9 +242,7 @@ function mount() {
         camera.position.copy(target).addScaledVector(forward, distance);
         camera.lookAt(target);
         camera.far = distance + 30;
-        // Expand the frustum without changing the original flower's pixel scale or position.
-        camera.aspect = panel.width / panel.height;
-        camera.fov = THREE.MathUtils.radToDeg(2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(33 / 2)) * panel.height / height));
+        camera.fov = 33;
         camera.updateProjectionMatrix();
         if (visible && !document.hidden) draw();
     }
@@ -375,7 +266,6 @@ function mount() {
         canvas.removeEventListener('webglcontextlost', contextLost);
         petals.forEach(p => p.mesh.geometry.dispose()); material.dispose();
         receptacleGeometry.dispose(); receptacleMaterial.dispose();
-        waterGeometry.dispose(); waterMaterial.dispose();
         renderer.dispose(); renderer.forceContextLoss(); canvas.remove(); dispose = undefined;
     };
     resize();

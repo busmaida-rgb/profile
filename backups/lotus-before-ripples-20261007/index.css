@@ -1367,7 +1367,6 @@ main {
     background: var(--beige);
     color: var(--gray);
 }
-.portfolio-intro__copy { display: contents; }
 .portfolio-intro__headline,
 .portfolio-intro__closing {
     position: absolute;
@@ -1379,10 +1378,11 @@ main {
 }
 .portfolio-intro__headline { top: 7.407407%; left: 4.166667%; }
 .portfolio-intro__closing { right: 4.166667%; bottom: 7.407407%; text-align: right; }
-.portfolio-intro__identity,
-.portfolio-intro__roles {
+.portfolio-intro__identity {
     position: absolute;
     z-index: 2;
+    left: 4.166667%;
+    bottom: 7.407407%;
     margin: 0;
     color: var(--gray);
     font-family: inherit;
@@ -1390,10 +1390,6 @@ main {
     font-weight: 700;
     line-height: inherit;
 }
-.portfolio-intro__identity { left: 4.166667%; bottom: 7.407407%; }
-.portfolio-intro__roles { top: 7.407407%; right: 4.166667%; display: flex; flex-direction: column; gap: 8px; text-align: right; }
-.portfolio-intro__roles li { display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
-.portfolio-intro__roles li::before { content: ''; flex: none; width: 4px; height: 4px; background: currentColor; }
 .portfolio-intro__lotus {
     position: absolute;
     z-index: 1;
@@ -1404,19 +1400,19 @@ main {
     transform: translate(-50%, -50%);
     pointer-events: none;
     user-select: none;
-    contain: layout;
+    contain: layout paint;
 }
 .portfolio-intro__lotus canvas { display: block; width: 100%; height: 100%; }
 .portfolio-intro .marquee--intro { position: absolute; bottom: 0; }
 @media (max-width: 600px) {
     .portfolio-intro { min-height: 600px; }
-    .portfolio-intro__copy { position: absolute; z-index: 2; top: 9%; left: var(--page-gutter); right: var(--page-gutter); display: flex; flex-direction: column; }
-    .portfolio-intro__headline, .portfolio-intro__closing { position: static; font-size: clamp(26px, 7.2vw, 36px); text-align: left; }
-    .portfolio-intro__identity { left: var(--page-gutter); bottom: 9%; font-size: 14px; }
-    .portfolio-intro__roles { top: auto; right: var(--page-gutter); bottom: 9%; font-size: 14px; }
+    .portfolio-intro__headline, .portfolio-intro__closing { font-size: clamp(26px, 7.2vw, 36px); }
+    .portfolio-intro__headline { top: 9%; left: var(--page-gutter); }
+    .portfolio-intro__closing { right: var(--page-gutter); bottom: 9%; }
+    .portfolio-intro__identity { left: var(--page-gutter); bottom: calc(9% + 110px); font-size: 14px; }
     .portfolio-intro__lotus { width: 96%; height: max(48%, 300px); }
 }
 @media (prefers-reduced-motion: no-preference) {
-    .portfolio-intro__headline, .portfolio-intro__closing, .portfolio-intro__identity, .portfolio-intro__roles { animation: marquee-fade-in 1000ms 150ms both; }
+    .portfolio-intro__headline, .portfolio-intro__closing, .portfolio-intro__identity { animation: marquee-fade-in 1000ms 150ms both; }
     .portfolio-intro__closing { animation-delay: 350ms; }
 }
