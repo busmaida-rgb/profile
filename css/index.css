@@ -2248,7 +2248,7 @@ main {
     font-size: clamp(40px, 4.166667vw, 80px);
     font-weight: 700;
     font-style: italic;
-    line-height: normal;
+    line-height: 1.0;
 }
 
 #portfolio-title {
@@ -2339,7 +2339,7 @@ main {
     bottom: 0;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 900px) {
     .portfolio-intro {
         min-height: 600px;
     }
@@ -2352,6 +2352,7 @@ main {
         right: var(--page-gutter);
         display: flex;
         flex-direction: column;
+        gap: 12px;
     }
 
     .portfolio-intro__headline,
@@ -2422,7 +2423,7 @@ main {
         }
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 900px) {
         .portfolio-intro__closing {
             --intro-copy-hidden: inset(-0.15em 100% -0.15em 0);
         }
