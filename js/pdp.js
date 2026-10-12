@@ -4,6 +4,7 @@
 
     new Swiper(gallery, {
         slidesPerView: 'auto',
+        centerInsufficientSlides: true,
         spaceBetween: 40,
         speed: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 400,
         grabCursor: true,
