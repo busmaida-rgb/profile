@@ -164,3 +164,17 @@
     .case-footer { gap: 12px; }
     .case-footer a, .case-footer button { padding-inline: 14px; font-size: 14px; }
 }
+
+@media print {
+    html {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    /* Also reset the inline translation used by the bounded sticky script. */
+    .website-case :is(.case-links, .marun-link) {
+        position: static !important;
+        inset: auto !important;
+        transform: none !important;
+    }
+}

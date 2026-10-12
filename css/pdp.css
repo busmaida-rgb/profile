@@ -132,3 +132,15 @@ p {
     .pdp-close { padding-inline: 14px; font-size: 14px; }
 }
 .pdp-close-message { flex-basis: 100%; margin-top: 12px; padding: 8px 16px; border-radius: 8px; background: #fff; color: #222; font-size: 14px; }
+
+@media print {
+    html {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .pdp-actions,
+    .pdp-background {
+        display: none !important;
+    }
+}

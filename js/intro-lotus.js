@@ -315,8 +315,53 @@ function mount() {
         waterMaterial.uniforms.uTime.value = waterTime;
         lastTime = time; draw(); frame = requestAnimationFrame(tick);
     }
+    let printing = false, printState;
+    const printMedia = matchMedia('print');
+    const printImage = document.createElement('img');
+    printImage.className = 'portfolio-intro__print-still';
+    printImage.alt = '';
+    printImage.hidden = true;
+    function beginPrint() {
+        if (printing || dead) return;
+        printing = true;
+        printState = {
+            time: timeline?.time(), completed, opacity: state.opacity,
+            tilt: tilt.rotation.clone(), spin: spin.rotation.clone(),
+            rotation: flower.rotation.clone(), y: flower.position.y,
+        };
+        stop();
+        still();
+        resize();
+        draw();
+        // Render a high-resolution, fully opened flower synchronously for printing.
+        renderer.setPixelRatio(Math.max(3, Math.min(4, 2400 / host.parentElement.clientWidth)));
+        waterMaterial.uniforms.uPixelRatio.value = renderer.getPixelRatio();
+        waterMaterial.uniforms.uMotion.value = 0;
+        renderer.render(scene, camera);
+        printImage.src = canvas.toDataURL('image/png');
+        host.parentElement.append(printImage);
+    }
+    function endPrint() {
+        if (!printing) return;
+        printing = false;
+        printImage.remove();
+        timeline?.time(printState.time, true);
+        completed = printState.completed;
+        state.opacity = printState.opacity;
+        tilt.rotation.copy(printState.tilt);
+        spin.rotation.copy(printState.spin);
+        flower.rotation.copy(printState.rotation);
+        flower.position.y = printState.y;
+        resize();
+        sync();
+    }
+    function changePrint(event) { if (event.matches) beginPrint(); else endPrint(); }
+    window.addEventListener('beforeprint', beginPrint);
+    window.addEventListener('afterprint', endPrint);
+    printMedia.addEventListener('change', changePrint);
     function sync() {
         stop();
+        if (printing) return;
         if (dead || !visible || document.hidden) { resetPointer(); return; }
         if (motion.matches || !timeline) { still(); draw(); return; }
         if (!started) {
@@ -366,6 +411,10 @@ function mount() {
     canvas.addEventListener('webglcontextlost', contextLost);
     dispose = () => {
         dead = true; stop(); timeline?.kill(); visibility.disconnect(); size.disconnect(); removal.disconnect();
+        window.removeEventListener('beforeprint', beginPrint);
+        window.removeEventListener('afterprint', endPrint);
+        printMedia.removeEventListener('change', changePrint);
+        printImage.remove();
         document.removeEventListener('visibilitychange', sync);
         motion.removeEventListener('change', sync);
         window.removeEventListener('pointermove', trackPointer);

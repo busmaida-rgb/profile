@@ -48,12 +48,32 @@
 
 (() => {
     const section = document.querySelector('.banner-designs');
-    if (!section || typeof Swiper === 'undefined') return;
+    if (!section) return;
 
     // 각 슬라이드의 template 안에서 제목과 설명을 수정합니다.
     const descriptions = [...section.querySelectorAll('template')].map(template => template.content);
     const wrapper = section.querySelector('.swiper-wrapper');
     const slides = [...wrapper.children];
+    // Build the print sequence from originals before adding any loop copies.
+    const printList = document.createElement('div');
+    printList.className = 'banner-designs__print-list';
+    printList.hidden = true;
+    slides.forEach(slide => {
+        const image = slide.querySelector('img');
+        const template = slide.querySelector('template');
+        if (!image || !template) return;
+        const project = document.createElement('article');
+        project.className = 'banner-designs__print-project';
+        const printImage = image.cloneNode(true);
+        printImage.loading = 'eager';
+        const description = document.createElement('div');
+        description.className = 'banner-designs__description';
+        description.append(template.content.cloneNode(true));
+        project.append(printImage, description);
+        printList.append(project);
+    });
+    section.querySelector('.banner-designs__panel').append(printList);
+    if (typeof Swiper === 'undefined') return;
     // 데스크톱에서는 다음 배너도 일부 보여서, 두 작품만 있을 때 루프용 복사본이 필요합니다.
     if (slides.length === 2) {
         slides.forEach(slide => wrapper.append(slide.cloneNode(true)));

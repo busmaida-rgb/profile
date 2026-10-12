@@ -1,0 +1,255 @@
+/* Static print layout. Important rules override GSAP/Swiper inline styles. */
+@media print {
+    @page { margin: 12mm; }
+
+    html, body {
+        --page-background: var(--beige) !important;
+        height: auto !important;
+        overflow: visible !important;
+        background: #fff !important;
+        color: #222;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+
+    *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    main { display: block !important; }
+
+    .site-menu, .cursor-dot, .image-modal, .marquee,
+    .profile-content__media,
+    .content-designs__background, .content-designs__detail,
+    .content-designs__vines,
+    .banner-designs__botanical,
+    .banner-designs__controls, .website-project__overlay {
+        display: none !important;
+    }
+
+    /* Remove pin spacing even when printing midway through a pinned section. */
+    .pin-spacer {
+        display: contents !important;
+    }
+
+    .website-projects,
+    .profile-content__media,
+    .profile-content__details::before,
+    .portfolio-intro__title-sticky,
+    .content-designs__detail,
+    .content-designs__heading {
+        position: static !important;
+        inset: auto !important;
+        transform: none !important;
+        translate: none !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+    }
+
+    .profile-content__media {
+        width: 45mm !important;
+        height: 65mm !important;
+        margin: 0 auto 8mm !important;
+        break-inside: avoid;
+    }
+
+    .profile-print-photo {
+        display: block !important;
+        width: 45mm;
+        height: auto;
+        max-height: none;
+        margin: 8mm auto;
+        break-inside: avoid;
+    }
+
+    .portfolio-intro__panel { bottom: 0 !important; }
+    .portfolio-intro__panel:has(.portfolio-intro__print-still) .portfolio-intro__lotus {
+        visibility: hidden !important;
+    }
+    .portfolio-intro__print-still {
+        display: block !important;
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    .profile-content, .profile-content__details, .profile-content__body,
+    .content-designs, .website-projects, .website-projects__viewport,
+    .website-projects__track, .website-project__gallery,
+    .banner-designs__body, .swiper, .swiper-wrapper {
+        display: block !important;
+        width: 100% !important;
+        max-width: none !important;
+        height: auto !important;
+        min-height: 0 !important;
+        overflow: visible !important;
+        transform: none !important;
+        translate: none !important;
+        clip-path: none !important;
+    }
+
+    .profile-content__details::before { display: none !important; }
+    .profile-content__details { background: var(--main2); }
+
+    .profile-section-heading, .profile-about__body,
+    .website-projects__heading > *, .content-designs__heading > *,
+    .banner-designs__heading > *, .product-detail-pages__heading > *,
+    .site-footer__title span, .site-footer__description,
+    .site-footer__divider, .site-footer__email,
+    .skill-card, .website-project, .banner-designs__body {
+        clip-path: none !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        translate: none !important;
+    }
+
+    .website-projects, .content-designs, .product-detail-pages,
+    .profile-content, .banner-designs__panel {
+        margin: 0 !important;
+        padding: 8mm 0 !important;
+    }
+
+    .website-projects__heading, .content-designs__heading,
+    .banner-designs__heading {
+        width: 100% !important;
+        padding: 0 !important;
+        margin-bottom: 6mm !important;
+        break-after: avoid;
+    }
+
+    /* 01–04: consistent inner gutters in addition to the paper margins. */
+    .website-projects, .content-designs, .banner-designs__panel {
+        padding-inline: 8mm !important;
+    }
+
+    .banner-designs__panel {
+        display: block !important;
+        gap: 0 !important;
+    }
+
+    .website-projects__track, .content-designs .popup-projects {
+        padding-inline: 0 !important;
+    }
+
+    .website-project {
+        display: block !important;
+        height: auto !important;
+        margin-bottom: 10mm;
+        break-inside: avoid;
+    }
+
+    .website-project__info {
+        padding: 0 0 4mm !important;
+        white-space: normal !important;
+    }
+
+    .website-project__devices {
+        display: flex !important;
+        align-items: flex-end;
+        gap: 3.4mm !important;
+        width: 85% !important;
+        margin-inline: auto !important;
+        transform: none !important;
+    }
+
+    .website-project__device {
+        /* Share one scale: original PC / tablet / mobile heights are 700 / 600 / 500. */
+        flex: var(--device-width) 1 0 !important;
+        min-width: 0;
+        width: auto !important;
+        height: auto !important;
+        margin: 0 !important;
+    }
+
+    .website-project__device img { height: auto !important; }
+
+    .popup-projects { display: block !important; }
+    .popup-project { margin-bottom: 8mm; break-inside: avoid; }
+    .content-designs .popup-project__image {
+        width: auto !important;
+        height: 160mm !important;
+        max-width: 100% !important;
+        max-height: 160mm !important;
+        aspect-ratio: auto !important;
+        margin-inline: auto !important;
+        object-fit: contain;
+    }
+    .content-designs .popup-project > .popup-project__description {
+        position: static !important;
+        width: auto !important;
+        height: auto !important;
+        margin: 4mm 0 0 !important;
+        padding: 0 !important;
+        overflow: visible !important;
+        clip-path: none !important;
+        white-space: normal !important;
+        text-align: center !important;
+        align-items: center;
+    }
+
+    /* Print only the original image/description pairs, never Swiper loop copies. */
+    .banner-designs .banner-designs__body { display: none !important; }
+    .banner-designs__print-list {
+        display: block !important;
+        padding-inline: 0;
+    }
+    .banner-designs__print-project {
+        margin-bottom: 8mm;
+        break-inside: avoid;
+    }
+    .banner-designs__print-project > img {
+        display: block;
+        width: 100%;
+        height: auto;
+        max-height: none;
+    }
+    .banner-designs__print-project > .banner-designs__description {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        max-width: none;
+        margin: 4mm 0 0;
+        padding: 0;
+        text-align: center;
+    }
+
+    .product-detail-page.swiper-slide {
+        width: 100% !important;
+        height: auto !important;
+        margin: 0 0 6mm !important;
+        transform: none !important;
+        break-inside: avoid;
+    }
+
+    .product-detail-page__thumbnail.website-project__thumbnail {
+        width: 80mm !important;
+        max-width: 100% !important;
+        height: auto !important;
+        margin-inline: auto !important;
+    }
+
+    .product-detail-page__description {
+        align-items: center;
+        text-align: center;
+        margin: 4mm 8mm 0;
+    }
+
+    .site-footer {
+        background: var(--gray) !important;
+        color: #fff !important;
+    }
+
+    .portfolio-intro {
+        height: 160mm !important;
+        min-height: 0 !important;
+        break-inside: avoid;
+    }
+
+    .skill-card, .site-footer { break-inside: avoid; }
+}
