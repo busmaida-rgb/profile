@@ -52,6 +52,12 @@
 
     // 각 슬라이드의 template 안에서 제목과 설명을 수정합니다.
     const descriptions = [...section.querySelectorAll('template')].map(template => template.content);
+    const wrapper = section.querySelector('.swiper-wrapper');
+    const slides = [...wrapper.children];
+    // 데스크톱에서는 다음 배너도 일부 보여서, 두 작품만 있을 때 루프용 복사본이 필요합니다.
+    if (slides.length === 2) {
+        slides.forEach(slide => wrapper.append(slide.cloneNode(true)));
+    }
     const detail = section.querySelector('.banner-designs__description');
     const current = section.querySelector('.banner-designs__current');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -59,7 +65,7 @@
     let revision = 0;
 
     async function updateDescription(swiper, immediate = false) {
-        const index = swiper.realIndex;
+        const index = swiper.realIndex % descriptions.length;
         const token = ++revision;
         current.textContent = String(index + 1).padStart(2, '0');
         animation?.cancel();
