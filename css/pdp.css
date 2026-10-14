@@ -100,7 +100,9 @@ p {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: calc(10 * var(--case-unit)) calc(20 * var(--case-unit));
+    width: 44px;
+    height: 44px;
+    padding: 10px;
     border: 0;
     border-radius: 100px;
     box-shadow: 0 4px 16px rgb(0 0 0 / 18%);
@@ -122,14 +124,16 @@ p {
         top: calc(16px + env(safe-area-inset-top, 0px));
 
     }
-    .pdp-close {
-        min-height: 44px;
-        padding: 10px 20px;
-        font-size: 16px;
-    }
 }
 @media (max-width: 480px) {
-    .pdp-close { padding-inline: 14px; font-size: 14px; }
+    .pdp-close {
+        width: 40px;
+        height: 40px;
+    }
+    .pdp-close svg {
+        width: 20px;
+        height: 20px;
+    }
 }
 .pdp-close-message { flex-basis: 100%; margin-top: 12px; padding: 8px 16px; border-radius: 8px; background: #fff; color: #222; font-size: 14px; }
 
