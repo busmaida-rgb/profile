@@ -1709,7 +1709,12 @@ main {
 .product-detail-page__thumbnail.website-project__thumbnail {
     width: 100%;
     margin: 0;
-    aspect-ratio: 415 / 673;
+    aspect-ratio: auto;
+}
+
+.product-detail-page__thumbnail > .website-project__image {
+    height: auto;
+    object-fit: contain;
 }
 
 .product-detail-page__thumbnail .website-project__external {
@@ -1763,15 +1768,12 @@ main {
     }
 
     .product-detail-pages__swiper .swiper-wrapper {
-        align-items: center;
+        align-items: flex-start;
     }
 
     .product-detail-page.swiper-slide {
-        width: min(306px, calc(100vw - 40px));
-    }
-
-    .product-detail-page__thumbnail.website-project__thumbnail {
-        aspect-ratio: 306 / 497;
+        /* 카드 1.2개와 Swiper의 카드 간격 40px이 함께 들어가도록 계산합니다. */
+        width: min(306px, calc((100% - 40px) / 1.2));
     }
 
     .product-detail-page__thumbnail .website-project__external {
